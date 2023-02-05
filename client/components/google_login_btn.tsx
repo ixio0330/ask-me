@@ -10,10 +10,8 @@ const GoogleLoginButton = ({ children, onClick }: Props) => {
   return (
     <Box>
       <Button
-        size='lg'
         width='full'
-        mx='6'
-        maxW='md'
+        px='10'
         borderRadius='md'
         backgroundColor='white'
         color='#7F52FF'

@@ -1,36 +1,33 @@
 import { NextPage } from 'next';
 import ServiceLayout from '@/client/layout/service_layout';
-import { Box, Heading, Flex, Center } from '@chakra-ui/react';
+import { Box, Heading, Flex, Text } from '@chakra-ui/react';
 import GoogleLoginButton from '@/client/components/google_login_btn';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import firebaseClient from '@/common/firebase/client';
-
-const provider = new GoogleAuthProvider();
+import { useAuth } from '@/client/context/auth_user';
 
 const IndexPage: NextPage = () => {
-  /**
-   * * Event/click
-   * ? 구글로그인 버튼
-   */
-  const onClickGoogleLogin = async () => {
-    try {
-      const res = await signInWithPopup(firebaseClient.Auth, provider);
-      console.log(res.user);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const { signInWithGoogle } = useAuth();
+  
   return (
-    <ServiceLayout title='test'>
-      <Box maxW='md' mx='auto'>
+    <ServiceLayout 
+      title='Ask Me'
+      backgroundColor='#ECE6FD'
+      minH='100vh'
+    >
+      <Box maxW='md' mt='20'>
         <img src='/logo.svg' alt='로고' />
-        <Flex justify='center'>
-          <Heading>Ask me</Heading>
+        <Flex 
+          align='center'
+          justify='center' 
+          direction='column'
+          mt='10'
+        >
+          <Heading>Ask Me</Heading>
+          <Text>궁금한 것이 있으면 물어보세요!</Text>
         </Flex>
       </Box>
-      <Center mt='20'>
-        <GoogleLoginButton onClick={onClickGoogleLogin}>Google로 시작하기</GoogleLoginButton>
-      </Center>
+      <Box mt='20'>
+        <GoogleLoginButton onClick={signInWithGoogle}>Google로 시작하기</GoogleLoginButton>
+      </Box>
     </ServiceLayout>
   )
 }
