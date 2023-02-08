@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { ReactNode } from "react";
 import { Box, BoxProps } from "@chakra-ui/react";
+import AppHeader from "../components/app_header";
 
 interface Props {
   title: string;
@@ -13,6 +14,7 @@ const ServiceLayout: React.FC<Props & BoxProps> = ({ title, children, ...boxProp
       <Head>
         <title>{title}</title>
       </Head>
+      <AppHeader />
       <Box
         width='md'
         m='0 auto'
