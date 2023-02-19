@@ -15,9 +15,9 @@ export class BadRequest extends CustomError {
   }
 }
 
-export class InternalServerError extends CustomError {
-  constructor(message: string = '서버 내부에서 오류가 발생했습니다.') {
-    super(message, 500);
+export class NotFound extends CustomError {
+  constructor(message: string = '존재하지 않습니다.') {
+    super(message, 404);
   }
 }
 
@@ -25,4 +25,10 @@ export class NotAllowedMethod extends CustomError {
   constructor(message: string = '사용할 수 없는 메소드입니다.') {
     super(message, 405);
   } 
+}
+
+export class InternalServerError extends CustomError {
+  constructor(message: string = '서버 내부에서 오류가 발생했습니다.') {
+    super(message, 500);
+  }
 }

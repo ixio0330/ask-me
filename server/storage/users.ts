@@ -43,6 +43,14 @@ const UsersStorage = {
       console.log(error);
       return { result: false, message: '서버 에러'}
     }
+  },
+  async getByScreenName(screenName: string): Promise<InAuthUser | null> {
+    const userRef = firebaseAdmin.Firebase.collection(SCREEN_NAME_COL).doc(screenName);
+    const usersDoc = await userRef.get();
+    if (!usersDoc.exists) {
+      return null;
+    }
+    return usersDoc.data() as InAuthUser;
   }
 }
 

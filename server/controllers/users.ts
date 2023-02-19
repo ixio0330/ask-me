@@ -1,4 +1,4 @@
-import { BadRequest, InternalServerError } from './../error/index';
+import { BadRequest, InternalServerError, NotFound } from './../error/index';
 import type { NextApiRequest, NextApiResponse } from 'next'
 import UsersStorage from '@/server/storage/users';
 
@@ -30,6 +30,19 @@ const UsersController: Omit<any, Method> = {
     }
     return addResult;
   },
+  async GET(req: NextApiRequest) {
+    const { screenName } = req.query;
+
+    if (screenName === undefined || screenName === null) {
+      throw new BadRequest('screenName이 누락되었습니다.');
+    }
+
+    const findResult = await UsersStorage.getByScreenName(Array.isArray(screenName) ? screenName[0] : screenName);
+    if (!findResult) {
+      throw new NotFound('존재하지 않는 사용자입니다.');
+    }
+    return findResult;
+  }
 };
 
 export default UsersController;
