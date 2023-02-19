@@ -27,13 +27,14 @@ const AskController: Omit<any, Method> = {
     return addResult;
   },
   async GET(req: NextApiRequest) {
-    const { screenName } = req.query;
+    const { uid } = req.query;
 
-    if (screenName === undefined || screenName === null) {
-      throw new BadRequest('screenName이 누락되었습니다.');
+    if (uid === undefined || uid === null) {
+      throw new BadRequest('uid가 누락되었습니다.');
     }
 
-    // return await AskStorage.getByScreenName(Array.isArray(screenName) ? screenName[0] : screenName);
+    const uidToStr = Array.isArray(uid) ? uid[0] : uid;
+    return await AskStorage.getAll({ uid: uidToStr });
   }
 };
 
