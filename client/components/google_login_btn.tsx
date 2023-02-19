@@ -1,5 +1,6 @@
 import { Box, Button } from '@chakra-ui/react';
 import { ReactNode } from 'react';
+import color from '../color';
 
 interface Props {
   children: ReactNode;
@@ -13,8 +14,8 @@ const GoogleLoginButton = ({ children, onClick }: Props) => {
         width='full'
         px='10'
         borderRadius='md'
-        backgroundColor='white'
-        color='#7F52FF'
+        backgroundColor={color.white}
+        color={color.primary}
         colorScheme='none'
         leftIcon={<img src='/google.svg' alt='google 로고' />}
         onClick={onClick}
