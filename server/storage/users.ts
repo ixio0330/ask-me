@@ -21,8 +21,8 @@ const UsersStorage = {
           .Firebase
           .collection(SCREEN_NAME_COL)
           .doc((email as string).replace('@gmail.com', ''));
-        const usersDoc = await transection.get(userRef);
-        if (usersDoc.exists) {
+        const userDoc = await transection.get(userRef);
+        if (userDoc.exists) {
           return false;
         }
         const addData = {
@@ -41,16 +41,16 @@ const UsersStorage = {
       return { result: true, data: uid };
     } catch (error) {
       console.log(error);
-      return { result: false, message: '서버 에러'}
+      return { result: false, message: '사용자 등록에 실패했습니다.'}
     }
   },
   async getByScreenName(screenName: string): Promise<InAuthUser | null> {
     const userRef = firebaseAdmin.Firebase.collection(SCREEN_NAME_COL).doc(screenName);
-    const usersDoc = await userRef.get();
-    if (!usersDoc.exists) {
+    const userDoc = await userRef.get();
+    if (!userDoc.exists) {
       return null;
     }
-    return usersDoc.data() as InAuthUser;
+    return userDoc.data() as InAuthUser;
   }
 }
 

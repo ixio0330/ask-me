@@ -1,11 +1,6 @@
 import { BadRequest, InternalServerError, NotFound } from './../error/index';
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest } from 'next'
 import UsersStorage from '@/server/storage/users';
-
-type Data = {
-  message?: string;
-  data?: any;
-}
 
 export type Method = 'POST' | 'GET' | 'PUT' | 'DELETE';
 
@@ -26,7 +21,7 @@ const UsersController: Omit<any, Method> = {
   
     const addResult = await UsersStorage.add(req.body);
     if (!addResult.result) {
-      throw new InternalServerError();
+      throw new InternalServerError(addResult.message);
     }
     return addResult;
   },

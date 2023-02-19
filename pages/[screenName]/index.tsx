@@ -1,22 +1,41 @@
 import ServiceLayout from "@/client/layout/service_layout";
-import { Avatar, Box, Button, Flex, Heading, Spacer, Text, Textarea } from "@chakra-ui/react";
-import { NextPage } from "next";
-import { useState } from "react";
+import { Avatar, Box, Button, Flex, FormLabel, Heading, Spacer, Switch, Text, Textarea, useToast } from "@chakra-ui/react";
+import { GetServerSideProps, NextPage } from "next";
+import { ChangeEvent, useState } from "react";
+import ResizeTextarea from 'react-textarea-autosize';
 import color from "@/client/color";
+import { useAuth } from "@/client/context/auth_user";
+import { InAuthUser } from "@/common/models/in_auth_user";
+import axios from 'axios';
 
-const info = {
-  uid: 'ixio0330',
-  email: 'ixio0330@gmail.com',
-  displayName: '서나무',
-  photoURL: '',
-  description: '주니어 웹 프론트엔드 개발자 서나무입니다.',
-};
+interface Props {
+  userInfo: InAuthUser | null;
+}
 
-const UserHomePage: NextPage = () => {
+const UserHomePage: NextPage<Props> = ({ userInfo }) => {
   const [ask, setAsk] = useState('');
+  const [isAnonymous, setIsAnonymous] = useState(false);
+  const { authUser } = useAuth();
+  const toast = useToast();
+  const onChangeAsk = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    if (e.currentTarget.value) {
+      const lineCount = e.currentTarget.value.match(/[^\n]*\n[^\n]*/gi)?.length || 1;
+      if (7 < lineCount) {
+        toast({
+          title: '최대 7줄까지만 입력가능합니다.',
+          position: 'top-right',
+        });
+        return;
+      }
+    }
+    setAsk(e.currentTarget.value);
+  }
+  if (userInfo === null) {
+    return <p>사용자를 찾을 수 없습니다.</p>
+  }
   return (
     <ServiceLayout
-      title={info.displayName || 'User Home'}
+      title={userInfo.displayName || 'User Home'}
       backgroundColor={color.tertiary}
       minH='100vh'
     >
@@ -45,25 +64,46 @@ const UserHomePage: NextPage = () => {
           <Avatar 
             width='52px'
             height='52px' 
-            src={info.photoURL} 
+            src={userInfo.photoURL ?? ''} 
             background={color.primary}
           />
         </Box>
         <Box>
-          <Heading my='3' size='md'>{info.displayName}</Heading>
-          <Text>{info.description}</Text>
+          <Heading my='3' size='md'>{userInfo.displayName}</Heading>
+          <Text>안녕하세요 {userInfo.displayName}입니다.</Text>
           <Textarea
             value={ask}
-            onChange={e => setAsk(e.target.value)}
+            onChange={onChangeAsk}
             my='3'
             placeholder='무엇이 궁금한가요?'
             bg={color.tertiary}
             focusBorderColor={color.primary}
-            maxLength={200}
+            maxLength={2000}
+            minH='unset'
             resize='none'
+            overflow='hidden'
+            as={ResizeTextarea}
+            minRows={1}
+            maxRows={7}
           />
-          <Flex>
-            <Spacer />
+          <Flex justifyContent='space-between' alignItems='center'>
+            {
+              authUser ? 
+              <Flex mt='2'>
+                <Switch 
+                  size='md' 
+                  colorScheme='purple' 
+                  id='anonymous' 
+                  mr='2'
+                  isChecked={isAnonymous}
+                  onChange={() => setIsAnonymous(!isAnonymous)}
+                />
+                <FormLabel htmlFor='anonymous' fontSize='sm'>
+                  익명으로 질문하기
+                </FormLabel>
+              </Flex> : 
+              <Spacer />
+            }
             <Button
               bg={color.primary} 
               color={color.white}
@@ -77,6 +117,37 @@ const UserHomePage: NextPage = () => {
       </Box>
     </ServiceLayout>
   )
+};
+
+export const getServerSideProps: GetServerSideProps<Props> = async ({ query }) => {
+  const { screenName } = query;
+  
+  if (screenName === undefined) {
+    return {
+      props: {
+        userInfo: null,
+      }
+    }
+  }
+
+  try {
+    const protocol = process.env.PROTOCOL || 'http';
+    const host = process.env.HOST || 'localhost';
+    const port = process.env.PORT || 3000;
+    const baseUrl = `${protocol}://${host}:${port}`;
+    const userInfo = await axios.get(`${baseUrl}/api/user/${screenName}`);
+    return {
+      props: {
+        userInfo: userInfo.data ?? null,
+      }
+    }
+  } catch (error) {
+    return {
+      props: {
+        userInfo: null,
+      }
+    }
+  }
 };
 
 export default UserHomePage;

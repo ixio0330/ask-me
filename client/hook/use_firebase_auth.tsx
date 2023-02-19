@@ -60,7 +60,7 @@ const uesFirebaseAuth = () => {
 
   useEffect(() => {
     if (authUser?.uid) {
-      router.push(`/${authUser.displayName}`);
+      router.push(`/${authUser.email?.replace('@gmail.com', '')}`);
     }
   }, [authUser?.uid]);
 
