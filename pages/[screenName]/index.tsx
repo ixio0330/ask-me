@@ -7,6 +7,7 @@ import color from "@/client/color";
 import { useAuth } from "@/client/context/auth_user";
 import { InAuthUser } from "@/common/models/in_auth_user";
 import axios from 'axios';
+import AskApi from "@/client/api/ask";
 
 interface Props {
   userInfo: InAuthUser | null;
@@ -29,6 +30,31 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
       }
     }
     setAsk(e.currentTarget.value);
+  }
+  const onClickPostAsk = async () => {
+    try {
+      const postResult = await AskApi.post({ 
+        uid: userInfo?.uid as string, 
+        ask, 
+        author: isAnonymous ? null : {
+          displayName: authUser?.displayName ?? '',
+          photoURL: authUser?.photoURL ?? '',
+        },
+      });
+      if (!postResult?.result) {
+        toast({
+          title: postResult?.message,
+          position: 'top-right',
+        });
+        return;
+      }
+      setAsk('');
+    } catch (error) {
+      toast({
+        title: '질문 등록에 실패했습니다.',
+        position: 'top-right',
+      })
+    }
   }
   if (userInfo === null) {
     return <p>사용자를 찾을 수 없습니다.</p>
@@ -109,6 +135,7 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
               color={color.white}
               colorScheme='none'
               isDisabled={ask.length < 1}
+              onClick={onClickPostAsk}
             >
               등록
             </Button>

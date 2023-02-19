@@ -2,21 +2,13 @@ import { BadRequest } from './../error/index';
 import firebaseAdmin from '@/common/firebase/admin';
 import { USER_COL, SCREEN_NAME_COL } from "./users";
 import { firestore } from 'firebase-admin';
+import { AddAsk } from '@/common/models/ask';
 const ASK_COL = 'ask';
 
 type AskStatus = 'private' | 'public';
 
-interface AddRequest {
-  uid: string;
-  ask: string;
-  author?: {
-    displayName: string;
-    photoURL?: string;
-  }
-}
-
 const AskStorage = {
-  async add({ uid, ask, author }: AddRequest) {
+  async add({ uid, ask, author }: AddAsk) {
     const userRef = firebaseAdmin.Firebase.collection(USER_COL).doc(uid);
     return await firebaseAdmin.Firebase.runTransaction(async (transection) => {
       try {
