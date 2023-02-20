@@ -4,7 +4,7 @@ import firebaseAdmin from '@/common/firebase/admin';
 import { USER_COL, SCREEN_NAME_COL } from "./users";
 import { firestore } from 'firebase-admin';
 import { AddAsk, AskStatus, InAskServer } from '@/common/models/ask';
-const ASK_COL = 'ask';
+export const ASK_COL = 'ask';
 
 const AskStorage = {
   async add({ uid, ask, author }: AddAsk) {
@@ -19,7 +19,7 @@ const AskStorage = {
         const newAskBody = {
           ask,
           createdAt: firestore.FieldValue.serverTimestamp(),
-          replys: null,
+          reply: null,
           status: 'public' as AskStatus,
           author: author ?? null,
         }
@@ -50,7 +50,7 @@ const AskStorage = {
           } as InAskClient;
           return returnData;
         });
-        return data;
+        return { result: true, data };
       } catch (error) {
         return { result: false, message: '질문 조회에 실패했습니다.'};
       }

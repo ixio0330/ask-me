@@ -17,7 +17,7 @@ interface Props {
 
 const UserHomePage: NextPage<Props> = ({ userInfo }) => {
   const [ask, setAsk] = useState('');
-  const [isAnonymous, setIsAnonymous] = useState(false);
+  const [isAnonymous, setIsAnonymous] = useState(true);
   const [askList, setAskList] = useState<InAskClient[]>([]);
   const { authUser } = useAuth();
   const toast = useToast();

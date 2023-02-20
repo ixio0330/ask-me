@@ -34,7 +34,12 @@ const AskController: Omit<any, Method> = {
     }
 
     const uidToStr = Array.isArray(uid) ? uid[0] : uid;
-    return await AskStorage.getAll({ uid: uidToStr });
+    const getResult = await AskStorage.getAll({ uid: uidToStr });
+    
+    if (!getResult.result) {
+      throw new InternalServerError(getResult.message);
+    }
+    return getResult.data;
   }
 };
 
