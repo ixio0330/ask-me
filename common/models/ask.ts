@@ -8,18 +8,19 @@ interface AskBase {
     displayName: string;
     photoURL?: string;
   } | null;
+  id: string;
 }
 
-export interface AddAsk extends AskBase {}
+export interface AddAsk extends Omit<AskBase, 'id'> {}
 
-export interface InAskClient extends AddAsk {
+export interface InAskClient extends AskBase {
   createdAt: string;
   reply?: string;
   replyedAt?: string;
   status: AskStatus;
 }
 
-export interface InAskServer extends AddAsk {
+export interface InAskServer extends AskBase {
   createdAt: firestore.Timestamp;
   reply?: string;
   replyedAt?: firestore.Timestamp;

@@ -46,13 +46,44 @@ const AskStorage = {
             ...docData,
             id: mv.id,
             createdAt: docData.createdAt.toDate().toISOString(),
-            replyedAt: docData.replyedAt? docData.replyedAt.toDate().toDateString() : undefined,
+            replyedAt: docData.replyedAt? docData.replyedAt.toDate().toISOString() : undefined,
           } as InAskClient;
           return returnData;
         });
         return { result: true, data };
       } catch (error) {
         return { result: false, message: '질문 조회에 실패했습니다.'};
+      }
+    });
+  },
+  async getById({ uid, askId }: { uid: string, askId: string }) {
+    const userRef = firebaseAdmin.Firebase.collection(USER_COL).doc(uid);
+    const askRef = firebaseAdmin.Firebase.collection(USER_COL).doc(uid).collection(ASK_COL).doc(askId);
+    return await firebaseAdmin.Firebase.runTransaction(async (transection) => {
+      try {
+        const userDoc = await transection.get(userRef);
+        const askDoc = await transection.get(askRef);
+  
+        if (!userDoc.exists) {
+          throw new BadRequest('존재하지 않는 사용자입니다.');
+        }
+  
+        if (!askDoc.exists) {
+          throw new BadRequest('존재하지 않는 질문입니다.');
+        }
+  
+        const askData = askDoc.data() as InAskServer;
+        return { 
+          result: true, 
+          data: {
+            ...askData,
+            id: askId,
+            createdAt: askData.createdAt.toDate().toISOString(),
+            replyedAt: askData.replyedAt? askData.replyedAt.toDate().toISOString() : undefined,
+          }
+        };
+      } catch (error) {
+        return { result: false, message: '질문을 조회하던 중 오류가 발생했습니다.'}
       }
     });
   }

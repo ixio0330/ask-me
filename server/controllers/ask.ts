@@ -27,14 +27,16 @@ const AskController: Omit<any, Method> = {
     return addResult;
   },
   async GET(req: NextApiRequest) {
-    const { uid } = req.query;
+    const { uid, askId } = req.query;
 
     if (uid === undefined || uid === null) {
       throw new BadRequest('uid가 누락되었습니다.');
     }
 
     const uidToStr = Array.isArray(uid) ? uid[0] : uid;
-    const getResult = await AskStorage.getAll({ uid: uidToStr });
+    const getResult = askId ? 
+      await AskStorage.getById({ uid: uidToStr, askId: askId as string }) : 
+      await AskStorage.getAll({ uid: uidToStr });
     
     if (!getResult.result) {
       throw new InternalServerError(getResult.message);

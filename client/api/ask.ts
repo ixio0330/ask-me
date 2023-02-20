@@ -2,10 +2,10 @@ import { InAskClient } from './../../common/models/ask';
 import { AddAsk } from "@/common/models/ask";
 import axios from 'axios';
 
-type Response = {
+type Response<T> = {
   result: boolean;
   message?: string;
-  data?: InAskClient[];
+  data?: T;
 }
 
 const AskApi = {
@@ -19,12 +19,12 @@ const AskApi = {
       });
       return {
         result: true,
-      } as Response;
+      } as Response<InAskClient[]>;
     } catch (error) {
       return {
         result: false,
         message: '질문 등록에 실패했습니다.'
-      } as Response;
+      } as Response<InAskClient[]>;
     }
   },
   async getAll(uid: string) {
@@ -33,14 +33,28 @@ const AskApi = {
       return {
         result: true,
         data: res.data,
-      } as Response;
+      } as Response<InAskClient[]>;
     } catch (error) {
       return {
         result: false,
         message: '질문 조회에 실패했습니다.',
-      } as Response;
+      } as Response<InAskClient[]>;
     }
   },
+  async getById(uid: string, askId: string) {
+    try {
+      const res = await axios.get(`/api/ask?uid=${uid}&askId=${askId}`);
+      return {
+        result: true,
+        data: res.data,
+      } as Response<InAskClient>;
+    } catch (error) {
+      return {
+        result: false,
+        message: '질문 조회에 실패했습니다.',
+      } as Response<InAskClient>;
+    }
+  }
 };
 
 export default AskApi;

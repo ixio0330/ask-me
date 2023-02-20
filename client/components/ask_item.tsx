@@ -4,6 +4,7 @@ import color from "../color";
 import convertDateToString from "@/common/utils/convert_date";
 import ResizeTextarea from 'react-textarea-autosize';
 import { ChangeEvent, useState } from "react";
+import ReplyApi from "../api/reply";
 
 interface Props {
   uid: string;
@@ -11,9 +12,10 @@ interface Props {
   photoURL: string | null;
   isOwner : boolean;
   item: InAskClient;
+  onSendComplete: () => void;
 }
 
-const AskItem = ({ item, photoURL, displayName, isOwner }: Props) => {
+const AskItem = ({ item, photoURL, displayName, isOwner, uid, onSendComplete }: Props) => {
   const [reply, setReply] = useState('');
   const toast = useToast();
   const onChangeReply = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -30,7 +32,18 @@ const AskItem = ({ item, photoURL, displayName, isOwner }: Props) => {
     setReply(e.currentTarget.value);
   };
 
-  const onClickPostReply = async () => {};
+  const onClickPostReply = async () => {
+    const postResult = await ReplyApi.post({ uid, askId: item.id, reply });
+    if (!postResult?.result) {
+      toast({
+        title: postResult?.message,
+        position: 'top-right',
+      });
+      return;
+    }
+    setReply('');
+    onSendComplete();
+  };
   return (
     <Box
       width='full'

@@ -19,6 +19,7 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
   const [ask, setAsk] = useState('');
   const [isAnonymous, setIsAnonymous] = useState(true);
   const [askList, setAskList] = useState<InAskClient[]>([]);
+  const [askListFetchTrigger, setAskListFetchTrigger] = useState(false);
   const { authUser } = useAuth();
   const toast = useToast();
   const onChangeAsk = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -35,47 +36,57 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
     setAsk(e.currentTarget.value);
   }
   const onClickPostAsk = async () => {
-    try {
-      const postResult = await AskApi.post({ 
-        uid: userInfo?.uid as string, 
-        ask, 
-        author: isAnonymous ? null : {
-          displayName: authUser?.displayName ?? '',
-          photoURL: authUser?.photoURL ?? '',
-        },
-      });
-      if (!postResult?.result) {
-        toast({
-          title: postResult?.message,
-          position: 'top-right',
-        });
-        return;
-      }
-      setAsk('');
-    } catch (error) {
+    const postResult = await AskApi.post({ 
+      uid: userInfo?.uid as string, 
+      ask, 
+      author: isAnonymous ? null : {
+        displayName: authUser?.displayName ?? '',
+        photoURL: authUser?.photoURL ?? '',
+      },
+    });
+    if (!postResult?.result) {
       toast({
-        title: '질문 등록에 실패했습니다.',
-        position: 'top-right',
-      })
-    }
-  }
-  
-  const fetchAsks = async (uid: string | undefined) => {
-    if (!uid) return;
-    const fetchAsks = await AskApi.getAll(uid);
-    if (!fetchAsks.result) {
-      toast({
-        title: fetchAsks?.message,
+        title: postResult?.message,
         position: 'top-right',
       });
       return;
     }
-    setAskList(fetchAsks?.data as InAskClient[]);
+    setAsk('');
+    setAskListFetchTrigger(!askListFetchTrigger);
   }
   
+  const fetchAllAsks = async (uid: string | undefined) => {
+    if (!uid) return;
+    const fetchResult = await AskApi.getAll(uid);
+    if (!fetchResult.result) {
+      toast({
+        title: fetchResult?.message,
+        position: 'top-right',
+      });
+      return;
+    }
+    setAskList(fetchResult?.data as InAskClient[]);
+  };
+
+  const fetchAsk = async (uid: string | undefined, askId: string) => {
+    if (!uid || !askId) return;
+    const fetchResult = await AskApi.getById(uid, askId);
+    if (!fetchResult.result || !fetchResult.data) {
+      toast({
+        title: fetchResult?.message,
+        position: 'top-right',
+      });
+      return;
+    }
+    const findIndex = askList.findIndex(fv => fv.id === fetchResult.data?.id);
+    const updateAskList = [...askList];
+    updateAskList[findIndex] = fetchResult.data;
+    setAskList(updateAskList);
+  };
+  
   useEffect(() => {
-    fetchAsks(userInfo?.uid);
-  }, [userInfo]);
+    fetchAllAsks(userInfo?.uid);
+  }, [userInfo, askListFetchTrigger]);
 
   if (userInfo === null) {
     return <p>사용자를 찾을 수 없습니다.</p>
@@ -177,6 +188,7 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
               displayName={userInfo.displayName}
               photoURL={userInfo.photoURL}
               isOwner={userInfo.uid === authUser?.uid}
+              onSendComplete={() => fetchAsk(userInfo?.uid, item.id)}
             />
           ))
         }
