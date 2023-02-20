@@ -38,7 +38,7 @@ const AskStorage = {
         if (!userDoc.exists) {
           throw new BadRequest('존재하지 않는 사용자입니다.');
         }
-        const askCol = userRef.collection(ASK_COL);
+        const askCol = userRef.collection(ASK_COL).orderBy('createdAt', 'desc');
         const askColDoc = await transection.get(askCol);
         const data = askColDoc.docs.map((mv) => {
           const docData = mv.data() as Omit<InAskServer, 'id'>;
