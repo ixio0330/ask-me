@@ -1,7 +1,7 @@
 import ServiceLayout from "@/client/layout/service_layout";
 import { Avatar, Box, Button, Flex, FormLabel, Heading, Spacer, Switch, Text, Textarea, useToast, VStack } from "@chakra-ui/react";
 import { GetServerSideProps, NextPage } from "next";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState, useRef } from "react";
 import ResizeTextarea from 'react-textarea-autosize';
 import color from "@/client/color";
 import { useAuth } from "@/client/context/auth_user";
@@ -20,7 +20,7 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
   const [isAnonymous, setIsAnonymous] = useState(true);
   const [askList, setAskList] = useState<InAskClient[]>([]);
   const [askListFetchTrigger, setAskListFetchTrigger] = useState(false);
-  const [offset, setOffset] = useState(1);
+  const offset = useRef(0);
   const [pageLeft, setPageLeft] = useState(true);
   const { authUser } = useAuth();
   const toast = useToast();
@@ -57,9 +57,9 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
     setAskListFetchTrigger(!askListFetchTrigger);
   }
   
-  const fetchAllAsks = async (uid: string | undefined, offset: number) => {
+  const fetchAllAsks = async (uid: string | undefined) => {
     if (!uid) return;
-    const fetchResult = await AskApi.getAll(uid, offset);
+    const fetchResult = await AskApi.getAll(uid, 0);
     if (!fetchResult.result) {
       toast({
         title: fetchResult?.message,
@@ -67,11 +67,7 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
       });
       return;
     }
-    if (fetchResult.data?.length === 0) {
-      setPageLeft(false);
-      return;
-    }
-    setAskList([...askList, ...fetchResult?.data as InAskClient[]]);
+    setAskList(fetchResult?.data as InAskClient[]);
   };
 
   const fetchAsk = async (uid: string | undefined, askId: string) => {
@@ -90,13 +86,27 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
     setAskList(updateAskList);
   };
 
-  const onClickMore = () => {
-    setOffset(offset + 10);
+  const onClickMore = async (uid: string) => {
+    offset.current += 10;
+    if (!uid) return;
+    const fetchResult = await AskApi.getAll(uid, offset.current);
+    if (!fetchResult.result) {
+      toast({
+        title: fetchResult?.message,
+        position: 'top-right',
+      });
+      return;
+    }
+    if (fetchResult.data?.length === 0) {
+      setPageLeft(false);
+      return;
+    }
+    setAskList([...askList, ...fetchResult?.data as InAskClient[]]);
   };
   
   useEffect(() => {
-    fetchAllAsks(userInfo?.uid, offset);
-  }, [userInfo, askListFetchTrigger, offset]);
+    fetchAllAsks(userInfo?.uid);
+  }, [userInfo, askListFetchTrigger]);
 
   if (userInfo === null) {
     return <p>사용자를 찾을 수 없습니다.</p>
@@ -204,14 +214,14 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
         }
       </VStack>
       {
-        pageLeft && 
+        pageLeft && 10 <= askList.length && 
           <Button
             width='full'
             mt='4'
             bg={color.primary} 
             color={color.white}
             colorScheme='none'
-            onClick={onClickMore}
+            onClick={() => onClickMore(userInfo?.uid)}
           >
             더보기
           </Button>

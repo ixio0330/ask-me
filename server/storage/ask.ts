@@ -41,7 +41,7 @@ const AskStorage = {
         }
         const askCol = userRef.collection(ASK_COL).orderBy('createdAt', 'desc');
         const askColDoc = await transection.get(askCol);
-        const paginationDoc = askColDoc.docs.slice(parseInt(offset), parseInt(limit));
+        const paginationDoc = askColDoc.docs.slice(parseInt(offset), parseInt(limit) + parseInt(offset));
         const data = paginationDoc.map((mv) => {
           const docData = mv.data() as Omit<InAskServer, 'id'>;
           const returnData = {
