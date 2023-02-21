@@ -1,8 +1,9 @@
 import { InAskClient } from './../../common/models/ask';
 import { BadRequest } from './../error/index';
 import firebaseAdmin from '@/common/firebase/admin';
-import { USER_COL, SCREEN_NAME_COL } from "./users";
+import { USER_COL } from "./users";
 import { firestore } from 'firebase-admin';
+import { query, orderBy, startAt, limit, collection } from 'firebase/firestore';
 import { AddAsk, AskStatus, InAskServer } from '@/common/models/ask';
 export const ASK_COL = 'ask';
 
@@ -30,7 +31,7 @@ const AskStorage = {
       }
     });
   },
-  async getAll({ uid }: { uid: string }) {
+  async getAll({ uid, offset = 0, limit = 10 }: { uid: string; offset: number; limit: number; }) {
     const userRef = firebaseAdmin.Firebase.collection(USER_COL).doc(uid);
     return await firebaseAdmin.Firebase.runTransaction(async (transection) => {
       try {
@@ -40,7 +41,8 @@ const AskStorage = {
         }
         const askCol = userRef.collection(ASK_COL).orderBy('createdAt', 'desc');
         const askColDoc = await transection.get(askCol);
-        const data = askColDoc.docs.map((mv) => {
+        const paginationDoc = askColDoc.docs.slice(offset, limit);
+        const data = paginationDoc.map((mv) => {
           const docData = mv.data() as Omit<InAskServer, 'id'>;
           const returnData = {
             ...docData,
