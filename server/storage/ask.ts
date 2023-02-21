@@ -31,7 +31,7 @@ const AskStorage = {
       }
     });
   },
-  async getAll({ uid, offset = 0, limit = 10 }: { uid: string; offset: number; limit: number; }) {
+  async getAll({ uid, offset = '0', limit = '10' }: { uid: string; offset: string | undefined; limit: string | undefined; }) {
     const userRef = firebaseAdmin.Firebase.collection(USER_COL).doc(uid);
     return await firebaseAdmin.Firebase.runTransaction(async (transection) => {
       try {
@@ -41,7 +41,7 @@ const AskStorage = {
         }
         const askCol = userRef.collection(ASK_COL).orderBy('createdAt', 'desc');
         const askColDoc = await transection.get(askCol);
-        const paginationDoc = askColDoc.docs.slice(offset, limit);
+        const paginationDoc = askColDoc.docs.slice(parseInt(offset), parseInt(limit));
         const data = paginationDoc.map((mv) => {
           const docData = mv.data() as Omit<InAskServer, 'id'>;
           const returnData = {

@@ -20,6 +20,8 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
   const [isAnonymous, setIsAnonymous] = useState(true);
   const [askList, setAskList] = useState<InAskClient[]>([]);
   const [askListFetchTrigger, setAskListFetchTrigger] = useState(false);
+  const [offset, setOffset] = useState(1);
+  const [pageLeft, setPageLeft] = useState(true);
   const { authUser } = useAuth();
   const toast = useToast();
   const onChangeAsk = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -55,9 +57,9 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
     setAskListFetchTrigger(!askListFetchTrigger);
   }
   
-  const fetchAllAsks = async (uid: string | undefined) => {
+  const fetchAllAsks = async (uid: string | undefined, offset: number) => {
     if (!uid) return;
-    const fetchResult = await AskApi.getAll(uid);
+    const fetchResult = await AskApi.getAll(uid, offset);
     if (!fetchResult.result) {
       toast({
         title: fetchResult?.message,
@@ -65,7 +67,11 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
       });
       return;
     }
-    setAskList(fetchResult?.data as InAskClient[]);
+    if (fetchResult.data?.length === 0) {
+      setPageLeft(false);
+      return;
+    }
+    setAskList([...askList, ...fetchResult?.data as InAskClient[]]);
   };
 
   const fetchAsk = async (uid: string | undefined, askId: string) => {
@@ -83,10 +89,14 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
     updateAskList[findIndex] = fetchResult.data;
     setAskList(updateAskList);
   };
+
+  const onClickMore = () => {
+    setOffset(offset + 10);
+  };
   
   useEffect(() => {
-    fetchAllAsks(userInfo?.uid);
-  }, [userInfo, askListFetchTrigger]);
+    fetchAllAsks(userInfo?.uid, offset);
+  }, [userInfo, askListFetchTrigger, offset]);
 
   if (userInfo === null) {
     return <p>사용자를 찾을 수 없습니다.</p>
@@ -193,6 +203,19 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
           ))
         }
       </VStack>
+      {
+        pageLeft && 
+          <Button
+            width='full'
+            mt='4'
+            bg={color.primary} 
+            color={color.white}
+            colorScheme='none'
+            onClick={onClickMore}
+          >
+            더보기
+          </Button>
+      }
     </ServiceLayout>
   )
 };

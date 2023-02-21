@@ -27,9 +27,9 @@ const AskApi = {
       } as Response<InAskClient[]>;
     }
   },
-  async getAll(uid: string) {
+  async getAll(uid: string, offset: number) {
     try {
-      const res = await axios.get(`/api/ask?uid=${uid}`);
+      const res = await axios.get(`/api/ask?uid=${uid}&offset=${offset}`);
       return {
         result: true,
         data: res.data,
