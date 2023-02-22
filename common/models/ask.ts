@@ -1,5 +1,4 @@
 import { firestore } from 'firebase-admin';
-export type AskStatus = 'private' | 'public';
 
 interface AskBase {
   uid: string;
@@ -17,12 +16,18 @@ export interface InAskClient extends AskBase {
   createdAt: string;
   reply?: string;
   replyedAt?: string;
-  status: AskStatus;
+  deny: boolean;
 }
 
 export interface InAskServer extends AskBase {
   createdAt: firestore.Timestamp;
   reply?: string;
   replyedAt?: firestore.Timestamp;
-  status: AskStatus;
+  deny: boolean;
+}
+
+export interface SetAskStatus {
+  uid: string;
+  askId: string;
+  deny: boolean;
 }

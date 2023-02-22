@@ -1,3 +1,4 @@
+import firebaseClient from '@/common/firebase/client';
 import { InAskClient } from './../../common/models/ask';
 import { AddAsk } from "@/common/models/ask";
 import axios from 'axios';
@@ -52,6 +53,35 @@ const AskApi = {
       return {
         result: false,
         message: '질문 조회에 실패했습니다.',
+      } as Response<InAskClient>;
+    }
+  },
+  async putAskDeny(uid: string, askId: string, deny: boolean) {
+    const token = await firebaseClient.Auth.currentUser?.getIdToken();
+    if (token === undefined) {
+      throw new Error('');
+    }
+    try {
+      const res = await axios.put('/api/ask', 
+        {
+          uid,
+          askId,
+          deny,
+        },
+        {
+          headers: {
+            Authorization: token,
+          }
+        }
+      );
+      return {
+        result: true,
+        data: res.data,
+      } as Response<InAskClient>
+    } catch (error) {
+      return {
+        result: false,
+        message: '질문 상태 변경 중 오류가 발생했습니다.',
       } as Response<InAskClient>;
     }
   }

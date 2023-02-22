@@ -5,6 +5,7 @@ import convertDateToString from "@/common/utils/convert_date";
 import ResizeTextarea from 'react-textarea-autosize';
 import { ChangeEvent, useState } from "react";
 import ReplyApi from "../api/reply";
+import AskApi from "../api/ask";
 
 interface Props {
   uid: string;
@@ -13,9 +14,10 @@ interface Props {
   isOwner : boolean;
   item: InAskClient;
   onSendComplete: () => void;
+  onUpdateDenyComplete: (askId: string, ask: InAskClient) => void;
 }
 
-const AskItem = ({ item, photoURL, displayName, isOwner, uid, onSendComplete }: Props) => {
+const AskItem = ({ item, photoURL, displayName, isOwner, uid, onSendComplete, onUpdateDenyComplete }: Props) => {
   const [reply, setReply] = useState('');
   const toast = useToast();
   const onChangeReply = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -44,6 +46,19 @@ const AskItem = ({ item, photoURL, displayName, isOwner, uid, onSendComplete }: 
     setReply('');
     onSendComplete();
   };
+
+  const onUpdateDeny = async (uid: string, askId: string, deny: boolean) => {
+    const fetchResult = await AskApi.putAskDeny(uid, askId, deny);
+    if (!fetchResult.result || !fetchResult.data) {
+      toast({
+        title: fetchResult?.message,
+        position: 'top-right',
+      });
+      return;
+    }
+    onUpdateDenyComplete(fetchResult.data?.id, fetchResult.data);
+  };
+
   return (
     <Box
       width='full'
@@ -79,7 +94,8 @@ const AskItem = ({ item, photoURL, displayName, isOwner, uid, onSendComplete }: 
               colorScheme='purple' 
               id='anonymous' 
               mr='2'
-              isChecked={item.status === 'public'}
+              isChecked={!item.deny}
+              onChange={() => onUpdateDeny(uid, item.id, !item.deny)}
             />
           </>
         }

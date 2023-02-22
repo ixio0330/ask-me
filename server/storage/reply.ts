@@ -7,6 +7,7 @@ import firebaseAdmin from '@/common/firebase/admin';
 import { AddReply } from '@/common/models/reply';
 
 const ReplyStorage = {
+  // * 답변 등록
   async add({ uid, askId, reply }: AddReply) {
     const userRef = firebaseAdmin.Firebase.collection(USER_COL).doc(uid);
     const askRef = firebaseAdmin.Firebase.collection(USER_COL).doc(uid).collection(ASK_COL).doc(askId);

@@ -80,9 +80,13 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
       });
       return;
     }
-    const findIndex = askList.findIndex(fv => fv.id === fetchResult.data?.id);
+    updateAsk(fetchResult.data?.id, fetchResult.data);
+  };
+
+  const updateAsk = (askId: string, newAsk: InAskClient) => {
+    const findIndex = askList.findIndex(fv => fv.id === askId);
     const updateAskList = [...askList];
-    updateAskList[findIndex] = fetchResult.data;
+    updateAskList[findIndex] = newAsk;
     setAskList(updateAskList);
   };
 
@@ -209,6 +213,7 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
               photoURL={userInfo.photoURL}
               isOwner={userInfo.uid === authUser?.uid}
               onSendComplete={() => fetchAsk(userInfo?.uid, item.id)}
+              onUpdateDenyComplete={updateAsk}
             />
           ))
         }

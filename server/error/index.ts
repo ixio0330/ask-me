@@ -27,6 +27,12 @@ export class NotAllowedMethod extends CustomError {
   } 
 }
 
+export class NotValidToken extends CustomError {
+  constructor(message: string = '토큰이 유효하지 않습니다.') {
+    super(message, 419);
+  }
+}
+
 export class InternalServerError extends CustomError {
   constructor(message: string = '서버 내부에서 오류가 발생했습니다.') {
     super(message, 500);

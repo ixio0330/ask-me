@@ -10,6 +10,7 @@ interface AddResponse {
 }
 
 const UsersStorage = {
+  // * 사용자 등록
   async add({uid, email, displayName, photoURL}: InAuthUser): Promise<AddResponse> {
     try {
       const addResult = await firebaseAdmin.Firebase.runTransaction(async (transection) => {
@@ -44,6 +45,7 @@ const UsersStorage = {
       return { result: false, message: '사용자 등록에 실패했습니다.'}
     }
   },
+  // * 사용자 ScreenName으로 조회
   async getByScreenName(screenName: string): Promise<InAuthUser | null> {
     const userRef = firebaseAdmin.Firebase.collection(SCREEN_NAME_COL).doc(screenName);
     const userDoc = await userRef.get();
