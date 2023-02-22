@@ -121,7 +121,7 @@ const AskItem = ({ item, photoURL, displayName, isOwner, uid, onSendComplete, on
             <Text>{item.reply}</Text>
           </Box>
         ) : (
-          isOwner && (
+          isOwner && !item.deny && (
             <>
               <Textarea
                 value={reply}

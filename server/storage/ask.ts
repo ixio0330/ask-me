@@ -48,6 +48,8 @@ const AskStorage = {
           const returnData = {
             ...docData,
             id: mv.id,
+            ask: docData.deny ? '비공개 처리된 질문입니다.' : docData.ask,
+            reply: docData.deny ? null : docData.reply,
             createdAt: docData.createdAt.toDate().toISOString(),
             replyedAt: docData.replyedAt? docData.replyedAt.toDate().toISOString() : undefined,
           } as InAskClient;
@@ -82,6 +84,8 @@ const AskStorage = {
           data: {
             ...askData,
             id: askId,
+            ask: askData.deny ? '비공개 처리된 질문입니다.' : askData.ask,
+            reply: askData.deny ? null : askData.reply,
             createdAt: askData.createdAt.toDate().toISOString(),
             replyedAt: askData.replyedAt? askData.replyedAt.toDate().toISOString() : undefined,
           }
@@ -116,6 +120,8 @@ const AskStorage = {
             ...askData,
             id: askId,
             deny,
+            ask: deny ? '비공개 처리된 질문입니다.' : askData.ask,
+            reply: deny ? null : askData.reply,
             createdAt: askData.createdAt.toDate().toISOString(),
             replyedAt: askData.replyedAt? askData.replyedAt.toDate().toISOString() : undefined,
           }
