@@ -3,30 +3,25 @@ import { useEffect, useState } from "react";
 import { GoogleAuthProvider, signInWithPopup, User } from 'firebase/auth';
 import firebaseClient from '@/common/firebase/client';
 import { useRouter } from "next/router";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { useToast } from "@chakra-ui/react";
+import { CustomError } from "@/server/error";
 
 const uesFirebaseAuth = () => {
   const [authUser, setAuthUser] = useState<InAuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const toast = useToast();
 
   /**
    * Google 로그인
    */
   const signInWithGoogle = async () => {
     try {
-      const { user } = await signInWithPopup(firebaseClient.Auth, new GoogleAuthProvider());
-      if (user) {
-        const result = await axios.post('/api/user', {
-          uid: user.uid,
-          email: user.email,
-          displayName: user.displayName,
-          photoURL: user.photoURL,
-        });
-        console.log(result);
-      }
+      await signInWithPopup(firebaseClient.Auth, new GoogleAuthProvider());
+      firebaseClient.Auth.onAuthStateChanged(authStateChanged);
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 
@@ -43,20 +38,37 @@ const uesFirebaseAuth = () => {
       setLoading(false);
       return;
     }
-    setLoading(true);
-    setAuthUser({
-      uid: authState.uid,
-      email: authState.email,
-      photoURL: authState.photoURL,
-      displayName: authState.displayName,
-    });
-    setLoading(false);
-  } 
+    try {
+      await axios.post('/api/user', {
+        uid: authState.uid,
+        email: authState.email,
+        displayName: authState.displayName,
+        photoURL: authState.photoURL,
+      });
+      setLoading(true);
+      setAuthUser({
+        uid: authState.uid,
+        email: authState.email,
+        photoURL: authState.photoURL,
+        displayName: authState.displayName,
+      });
+      setLoading(false);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        toast({
+          title: error.response?.data.message ?? '로그인 중 오류가 발생했습니다.',
+          position: 'top-right',
+          colorScheme: 'red',
+        });
+      }
+    }
+  };
 
-  useEffect(() => {
-    const unsubscribe = firebaseClient.Auth.onAuthStateChanged(authStateChanged);
-    return () => unsubscribe();
-  }, []);
+  // * 자동 로그인
+  // useEffect(() => {
+  //   const unsubscribe = firebaseClient.Auth.onAuthStateChanged(authStateChanged);
+  //   return () => unsubscribe();
+  // }, []);
 
   useEffect(() => {
     if (authUser?.uid) {

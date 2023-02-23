@@ -1,3 +1,4 @@
+import { BadRequest } from './../error/index';
 import firebaseAdmin from '@/common/firebase/admin';
 import { InAuthUser } from '@/common/models/in_auth_user';
 export const USER_COL = 'users';
@@ -12,6 +13,7 @@ interface AddResponse {
 const UsersStorage = {
   // * 사용자 등록
   async add({uid, email, displayName, photoURL}: InAuthUser): Promise<AddResponse> {
+    throw new BadRequest('현재는 신규 가입을 할 수 없습니다.');
     try {
       const addResult = await firebaseAdmin.Firebase.runTransaction(async (transection) => {
         const userRef = firebaseAdmin

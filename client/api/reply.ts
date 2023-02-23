@@ -1,6 +1,6 @@
 import { CustomError } from './../../server/error/index';
 import { AddReply } from './../../common/models/reply';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 type Response = {
   result: boolean;
@@ -22,10 +22,10 @@ const ReplyApi = {
       } as Response;
     } catch (error) {
       return (
-        error instanceof CustomError ? 
+        error instanceof AxiosError ? 
         {
           return: false,
-          message: error.message,
+          message: error.response?.data.message,
         } : 
         {
           result: false,

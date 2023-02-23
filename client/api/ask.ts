@@ -1,8 +1,7 @@
-import { CustomError } from './../../server/error/index';
 import firebaseClient from '@/common/firebase/client';
 import { InAskClient } from './../../common/models/ask';
 import { AddAsk } from "@/common/models/ask";
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 type Response<T> = {
   result: boolean;
@@ -23,10 +22,10 @@ const AskApi = {
         result: true,
       } as Response<InAskClient[]>;
     } catch (error) {
-      return (error instanceof CustomError ?
+      return (error instanceof AxiosError ?
         {
           return: false,
-          message: error.message,
+          message: error.response?.data.message,
         } : 
         {
           result: false,
@@ -43,10 +42,10 @@ const AskApi = {
         data: res.data,
       } as Response<InAskClient[]>;
     } catch (error) {
-      return (error instanceof CustomError ?
+      return (error instanceof AxiosError ?
         {
           return: false,
-          message: error.message,
+          message: error.response?.data.message,
         } :
         {
           result: false,
@@ -63,10 +62,10 @@ const AskApi = {
         data: res.data,
       } as Response<InAskClient>;
     } catch (error) {
-      return (error instanceof CustomError ?
+      return (error instanceof AxiosError ?
         {
           return: false,
-          message: error.message,
+          message: error.response?.data.message,
         } :
         {
           result: false,
@@ -98,10 +97,10 @@ const AskApi = {
         data: res.data,
       } as Response<InAskClient>
     } catch (error) {
-      return (error instanceof CustomError ?
+      return (error instanceof AxiosError ?
         {
           return: false,
-          message: error.message,
+          message: error.response?.data.message,
         } : 
         {
           result: false,
