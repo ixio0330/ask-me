@@ -1,3 +1,4 @@
+import { CustomError } from './../../server/error/index';
 import { AddReply } from './../../common/models/reply';
 import axios from 'axios';
 
@@ -20,10 +21,17 @@ const ReplyApi = {
         result: true,
       } as Response;
     } catch (error) {
-      return {
-        result: false,
-        message: '답변 등록에 실패했습니다.'
-      } as Response;
+      return (
+        error instanceof CustomError ? 
+        {
+          return: false,
+          message: error.message,
+        } : 
+        {
+          result: false,
+          message: '답변 등록에 실패했습니다.'
+        }
+      ) as Response;
     }
   }
 };
