@@ -5,7 +5,6 @@ import firebaseClient from '@/common/firebase/client';
 import { useRouter } from "next/router";
 import axios, { AxiosError } from "axios";
 import { useToast } from "@chakra-ui/react";
-import { CustomError } from "@/server/error";
 
 const uesFirebaseAuth = () => {
   const [authUser, setAuthUser] = useState<InAuthUser | null>(null);
@@ -39,13 +38,14 @@ const uesFirebaseAuth = () => {
       return;
     }
     try {
+      setLoading(true);
+      // 가입 요청
       await axios.post('/api/user', {
         uid: authState.uid,
         email: authState.email,
         displayName: authState.displayName,
         photoURL: authState.photoURL,
       });
-      setLoading(true);
       setAuthUser({
         uid: authState.uid,
         email: authState.email,

@@ -1,4 +1,3 @@
-import { CustomError } from './../../server/error/index';
 import { AddReply } from './../../common/models/reply';
 import axios, { AxiosError } from 'axios';
 
