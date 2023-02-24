@@ -16,10 +16,10 @@ const ServiceLayout: React.FC<Props & BoxProps> = ({ title, children, ...boxProp
       </Head>
       <AppHeader />
       <Box
-        width='md'
+        width='sm'
         m='0 auto'
         height='full'
-        padding='20px'
+        padding='2'
       >
         {children}
       </Box>
