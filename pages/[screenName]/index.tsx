@@ -39,7 +39,7 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
 
   const setTrigger = useCallback(() => setAskListFetchTrigger(!askListFetchTrigger), [askListFetchTrigger]);
 
-  const fetchAsk = useCallback(async (uid: string | undefined, askId: string) => {
+  const fetchAsk = async (uid: string | undefined, askId: string) => {
     if (!uid || !askId) return;
     const fetchResult = await AskApi.getById(uid, askId);
     if (!fetchResult.result || !fetchResult.data) {
@@ -50,14 +50,14 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
       return;
     }
     updateAsk(fetchResult.data?.id, fetchResult.data);
-  }, []);
+  };
 
-  const updateAsk = useCallback((askId: string, newAsk: InAskClient) => {
+  const updateAsk = (askId: string, newAsk: InAskClient) => {
     const findIndex = askList.findIndex(fv => fv.id === askId);
     const updateAskList = [...askList];
     updateAskList[findIndex] = newAsk;
     setAskList(updateAskList);
-  }, []);
+  };
 
   const onClickMore = async (uid: string) => {
     offset.current += 10;
