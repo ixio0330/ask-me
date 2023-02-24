@@ -1,61 +1,28 @@
 import ServiceLayout from "@/client/layout/service_layout";
-import { Avatar, Box, Button, Flex, FormLabel, Heading, Spacer, Switch, Text, Textarea, useToast, VStack } from "@chakra-ui/react";
+import { Avatar, Box, Button, Heading, Text, useToast, VStack } from "@chakra-ui/react";
 import { GetServerSideProps, NextPage } from "next";
-import { ChangeEvent, useEffect, useState, useRef } from "react";
-import ResizeTextarea from 'react-textarea-autosize';
+import { useEffect, useState, useRef, useCallback } from "react";
 import color from "@/client/color";
 import { useAuth } from "@/client/context/auth_user";
 import { InAuthUser } from "@/common/models/in_auth_user";
+import { InAskClient } from "@/common/models/ask";
 import axios from 'axios';
 import AskApi from "@/client/api/ask";
+
 import AskItem from "@/client/components/ask_item";
-import { InAskClient } from "@/common/models/ask";
+import AskForm from "@/client/components/ask_form";
 
 interface Props {
   userInfo: InAuthUser | null;
 }
 
 const UserHomePage: NextPage<Props> = ({ userInfo }) => {
-  const [ask, setAsk] = useState('');
-  const [isAnonymous, setIsAnonymous] = useState(true);
   const [askList, setAskList] = useState<InAskClient[]>([]);
   const [askListFetchTrigger, setAskListFetchTrigger] = useState(false);
   const offset = useRef(0);
   const [pageLeft, setPageLeft] = useState(true);
   const { authUser } = useAuth();
   const toast = useToast();
-  const onChangeAsk = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.currentTarget.value) {
-      const lineCount = e.currentTarget.value.match(/[^\n]*\n[^\n]*/gi)?.length || 1;
-      if (7 < lineCount) {
-        toast({
-          title: '최대 7줄까지만 입력가능합니다.',
-          position: 'top-right',
-        });
-        return;
-      }
-    }
-    setAsk(e.currentTarget.value);
-  }
-  const onClickPostAsk = async () => {
-    const postResult = await AskApi.post({ 
-      uid: userInfo?.uid as string, 
-      ask, 
-      author: isAnonymous ? null : {
-        displayName: authUser?.displayName ?? '',
-        photoURL: authUser?.photoURL ?? '',
-      },
-    });
-    if (!postResult?.result) {
-      toast({
-        title: postResult?.message,
-        position: 'top-right',
-      });
-      return;
-    }
-    setAsk('');
-    setAskListFetchTrigger(!askListFetchTrigger);
-  }
   
   const fetchAllAsks = async (uid: string | undefined) => {
     if (!uid) return;
@@ -70,7 +37,9 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
     setAskList(fetchResult?.data as InAskClient[]);
   };
 
-  const fetchAsk = async (uid: string | undefined, askId: string) => {
+  const setTrigger = useCallback(() => setAskListFetchTrigger(!askListFetchTrigger), [askListFetchTrigger]);
+
+  const fetchAsk = useCallback(async (uid: string | undefined, askId: string) => {
     if (!uid || !askId) return;
     const fetchResult = await AskApi.getById(uid, askId);
     if (!fetchResult.result || !fetchResult.data) {
@@ -81,14 +50,14 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
       return;
     }
     updateAsk(fetchResult.data?.id, fetchResult.data);
-  };
+  }, []);
 
-  const updateAsk = (askId: string, newAsk: InAskClient) => {
+  const updateAsk = useCallback((askId: string, newAsk: InAskClient) => {
     const findIndex = askList.findIndex(fv => fv.id === askId);
     const updateAskList = [...askList];
     updateAskList[findIndex] = newAsk;
     setAskList(updateAskList);
-  };
+  }, []);
 
   const onClickMore = async (uid: string) => {
     offset.current += 10;
@@ -115,6 +84,7 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
   if (userInfo === null) {
     return <p>사용자를 찾을 수 없습니다.</p>
   }
+  
   return (
     <ServiceLayout
       title={userInfo.displayName || 'User Home'}
@@ -154,51 +124,11 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
           <Text>안녕하세요 {userInfo.displayName}입니다.</Text>
           {
             userInfo.uid !== authUser?.uid &&
-            <>
-              <Textarea
-                value={ask}
-                onChange={onChangeAsk}
-                my='3'
-                placeholder='무엇이 궁금한가요?'
-                bg={color.tertiary}
-                focusBorderColor={color.primary}
-                maxLength={2000}
-                minH='unset'
-                resize='none'
-                overflow='hidden'
-                as={ResizeTextarea}
-                minRows={1}
-                maxRows={7}
-              />
-              <Flex justifyContent='space-between' alignItems='center'>
-                {
-                  authUser ? 
-                  <Flex mt='2'>
-                    <Switch 
-                      size='md' 
-                      colorScheme='purple' 
-                      id='anonymous' 
-                      mr='2'
-                      isChecked={isAnonymous}
-                      onChange={() => setIsAnonymous(!isAnonymous)}
-                    />
-                    <FormLabel htmlFor='anonymous' fontSize='sm'>
-                      익명으로 질문하기
-                    </FormLabel>
-                  </Flex> : 
-                  <Spacer />
-                }
-                <Button
-                  bg={color.primary} 
-                  color={color.white}
-                  colorScheme='none'
-                  isDisabled={ask.length < 1}
-                  onClick={onClickPostAsk}
-                >
-                  등록
-                </Button>
-              </Flex>
-            </>
+            <AskForm 
+              userInfo={userInfo}
+              authUser={authUser}
+              onSendComplete={setTrigger}
+            /> 
           }
         </Box>
       </Box>

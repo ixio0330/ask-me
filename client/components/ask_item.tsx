@@ -3,7 +3,7 @@ import { Avatar, Box, Button, Divider, Flex, FormLabel, Heading, Spacer, Switch,
 import color from "../color";
 import convertDateToString from "@/common/utils/convert_date";
 import ResizeTextarea from 'react-textarea-autosize';
-import { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import ReplyApi from "../api/reply";
 import AskApi from "../api/ask";
 
@@ -158,4 +158,4 @@ const AskItem = ({ item, photoURL, displayName, isOwner, uid, onSendComplete, on
   )
 };
 
-export default AskItem;
+export default React.memo(AskItem);
