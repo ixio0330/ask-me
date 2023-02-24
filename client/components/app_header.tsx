@@ -1,7 +1,7 @@
 import { Box, Button, Flex, Spacer } from "@chakra-ui/react";
 import { useMemo } from "react";
 import { useAuth } from "../context/auth_user";
-
+import color from "../color";
 
 const AppHeader = () => {
   const { loading, authUser, signOut, signInWithGoogle } = useAuth();
@@ -11,8 +11,8 @@ const AppHeader = () => {
       fontSize='sm'
       fontWeight='600'
       bg='white'
-      border='1px solid #7F52FF'
-      color='#7F52FF'
+      border={`1px solid ${color.primary}`}
+      color={color.primary}
       onClick={signInWithGoogle}
     >
       로그인
@@ -23,8 +23,8 @@ const AppHeader = () => {
       fontSize='sm'
       fontWeight='600'
       bg='white'
-      border='1px solid #7F52FF'
-      color='#7F52FF'
+      border={`1px solid ${color.primary}`}
+      color={color.primary}
       onClick={signOut}
     >
       로그아웃

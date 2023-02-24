@@ -91,7 +91,7 @@ const AskItem = ({ item, photoURL, displayName, isOwner, uid, onSendComplete, on
             </FormLabel>
             <Switch 
               size='md' 
-              colorScheme='purple' 
+              colorScheme='blue'
               id='anonymous' 
               mr='2'
               isChecked={!item.deny}
