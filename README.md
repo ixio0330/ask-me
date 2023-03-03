@@ -17,9 +17,12 @@
 <img src="https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=Next.js&logoColor=white" style="display:inline"/>
 <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" style="display:inline"/>
 <img src="https://img.shields.io/badge/Chakra UI-319795?style=flat-square&logo=Chakra UI&logoColor=white" style="display:inline"/>
+<img src="https://img.shields.io/badge/Firebase-FFCA28?style=flat-square&logo=Firebase&logoColor=white" style="display:inline"/>
 <img src="https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white" style="display:inline"/>
 
 <p>전역 상태 관리를 위해 React Context API를 사용했습니다.</p>
+
+<p>서버는 Firebase를, 배포는 Vercel을 이용했습니다.</p>
 
 <h3>Getting Started</h3>
 
