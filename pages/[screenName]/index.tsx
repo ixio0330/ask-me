@@ -9,6 +9,7 @@ import { InAskClient } from "@/common/models/ask";
 import axios from 'axios';
 import AskApi from "@/client/api/ask";
 
+import NotFoundPage from "../404";
 import AskItem from "@/client/components/ask_item";
 import AskForm from "@/client/components/ask_form";
 
@@ -82,7 +83,7 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
   }, [userInfo, askListFetchTrigger]);
 
   if (userInfo === null) {
-    return <p>사용자를 찾을 수 없습니다.</p>
+    return <NotFoundPage />
   }
   
   return (
