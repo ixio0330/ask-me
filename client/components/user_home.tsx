@@ -1,30 +1,24 @@
+'use client'
+
 import ServiceLayout from "@/client/layout/service_layout";
 import { Avatar, Box, Button, Heading, Text, useToast, VStack } from "@chakra-ui/react";
-import { GetServerSideProps, NextPage } from "next";
 import { useEffect, useState, useRef, useCallback } from "react";
 import color from "@/client/color";
 import { useAuth } from "@/client/context/auth_user";
 import { InAuthUser } from "@/common/models/in_auth_user";
 import { InAskClient } from "@/common/models/ask";
-import axios from 'axios';
 import AskApi from "@/client/api/ask";
-
-import NotFoundPage from "../404";
 import AskItem from "@/client/components/ask_item";
 import AskForm from "@/client/components/ask_form";
 
-interface Props {
-  userInfo: InAuthUser | null;
-}
-
-const UserHomePage: NextPage<Props> = ({ userInfo }) => {
+export default function UserHomePage({ userInfo }: { userInfo: InAuthUser }) {
   const [askList, setAskList] = useState<InAskClient[]>([]);
   const [askListFetchTrigger, setAskListFetchTrigger] = useState(false);
   const offset = useRef(0);
   const [pageLeft, setPageLeft] = useState(true);
   const { authUser } = useAuth();
   const toast = useToast();
-  
+
   const fetchAllAsks = async (uid: string | undefined) => {
     if (!uid) return;
     const fetchResult = await AskApi.getAll(uid, 0);
@@ -82,10 +76,6 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
     fetchAllAsks(userInfo?.uid);
   }, [userInfo, askListFetchTrigger]);
 
-  if (userInfo === null) {
-    return <NotFoundPage />
-  }
-  
   return (
     <ServiceLayout
       title={userInfo.displayName || 'User Home'}
@@ -165,36 +155,3 @@ const UserHomePage: NextPage<Props> = ({ userInfo }) => {
     </ServiceLayout>
   )
 };
-
-export const getServerSideProps: GetServerSideProps<Props> = async ({ query }) => {
-  const { screenName } = query;
-  
-  if (screenName === undefined) {
-    return {
-      props: {
-        userInfo: null,
-      }
-    }
-  }
-
-  try {
-    const protocol = process.env.PROTOCOL || 'http';
-    const host = process.env.HOST || 'localhost';
-    const port = process.env.PORT || 3000;
-    const baseUrl = `${protocol}://${host}:${port}`;
-    const userInfo = await axios.get(`${baseUrl}/api/user/${screenName}`);
-    return {
-      props: {
-        userInfo: userInfo.data ?? null,
-      }
-    }
-  } catch (error) {
-    return {
-      props: {
-        userInfo: null,
-      }
-    }
-  }
-};
-
-export default UserHomePage;

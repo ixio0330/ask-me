@@ -1,8 +1,10 @@
+'use client'
+
 import { InAuthUser } from "@/common/models/in_auth_user";
 import { useEffect, useState } from "react";
 import { GoogleAuthProvider, signInWithPopup, User } from 'firebase/auth';
 import firebaseClient from '@/common/firebase/client';
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
 import { useToast } from "@chakra-ui/react";
 

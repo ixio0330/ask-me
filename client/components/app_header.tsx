@@ -1,6 +1,7 @@
 import { Box, Button, Flex, Spacer } from "@chakra-ui/react";
 import { useMemo } from "react";
-import { useAuth } from "../context/auth_user";
+import { useAuth } from "@/client/context/auth_user";
+
 import color from "../color";
 
 const AppHeader = () => {
