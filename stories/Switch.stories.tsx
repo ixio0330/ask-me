@@ -25,5 +25,6 @@ const SwitchWithHooks = (props: SwitchProps) => {
 export const Default: Story = {
   render: (props) => <SwitchWithHooks {...props} />,
   args: {
+    label: '라벨'
   },
 };

@@ -1,24 +1,39 @@
 import styled from "@emotion/styled";
 import color from "@/client/color";
+import Typography from "../Typography";
 
 export interface SwitchProps {
   active: boolean;
   onClick?: () => void;
+  label?: string;
 }
 
-const Switch = (props: SwitchProps) => {
+const Switch = ({ active, label, onClick }: SwitchProps) => {
   return (
-    <S.Switch 
-      {...props}
-    >
-      <S.SwitchButton active={props.active} />
-    </S.Switch>
+    <S.SwitchContainer onClick={onClick}>
+      {
+        label && 
+          <Typography 
+            size='ex' 
+            style={{ marginRight: 8 }}
+          >
+            {label}
+          </Typography>
+      }
+      <S.Switch active={active}>
+        <S.SwitchButton active={active} />
+      </S.Switch>
+    </S.SwitchContainer>
   );
 };
 
 export default Switch;
 
 const S = {
+  SwitchContainer: styled('div')`
+    display: flex;
+    align-items: center;
+  `,
   Switch: styled('div')<SwitchProps>`
     position: relative;
     width: 36px;
