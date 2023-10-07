@@ -14,7 +14,7 @@ const S = {
   Input: styled('input')`
     display: flex;
     width: 100%;
-    height: 46px;
+    height: 48px;
     box-sizing: border-box;
     padding: 12px 16px;
     align-items: center;

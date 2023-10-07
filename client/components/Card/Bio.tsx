@@ -56,7 +56,7 @@ const Bio = (
       case 'owner':
         return (
           <>
-            <Typography style={{ height: 46, lineHeight: '46px' }}>{bio}</Typography>
+            <Typography style={{ height: 48, lineHeight: '48px' }}>{bio}</Typography>
             <Button 
               onClick={onClickUpdateBio}
               style={{ width: 'auto', justifySelf: 'end' }}
