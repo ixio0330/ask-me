@@ -6,8 +6,8 @@ interface ButtonProps extends ComponentProps<'button'> {
   variant: 'fill' | 'outlined'
 }
 
-const Button = ({ children, variant = 'fill' }: ButtonProps) => {
-  return <S.Button variant={variant}>{children}</S.Button>
+const Button = ({ children, variant = 'fill', ...props }: ButtonProps) => {
+  return <S.Button variant={variant} {...props}>{children}</S.Button>
 };
 
 export default Button;
