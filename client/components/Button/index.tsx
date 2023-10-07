@@ -3,7 +3,7 @@ import { ComponentProps } from "react";
 import color from "@/client/color";
 
 interface ButtonProps extends ComponentProps<'button'> {
-  variant: 'fill' | 'outlined'
+  variant?: 'fill' | 'outlined'
 }
 
 const Button = ({ children, variant = 'fill', ...props }: ButtonProps) => {
