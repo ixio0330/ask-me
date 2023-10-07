@@ -6,29 +6,25 @@ import Switch from "../Switch";
 import Input from "../Input";
 import Button from "../Button";
 
-const Answer = ({ deny, reply }: InAskClient) => {
+const Answer = ({ ask, deny, reply }: InAskClient) => {
   const render = () => {
     if (deny) {
       return (
         <>
           <Typography size='s' weight='b'>{reply}</Typography>
-          <span>공개</span>
-          <Switch active={!deny} />
+          <Switch label='공개' active={!deny} />
         </>
       );
     }
     if (!reply) {
       return (
         <>
-          <Typography size='s' weight='b'>{reply}</Typography>
+          <Typography size='s' weight='b'>{ask}</Typography>
           <Input placeholder='답변을 입력해주세요' />
-          <div>
-            <div>
-              <span>공개</span>
-              <Switch active={!deny} />
-            </div>
+          <S.AnswerActions>
+            <Switch label='공개' active={!deny} />
             <Button>등록</Button>
-          </div>
+          </S.AnswerActions>
         </>
       )
     }
@@ -49,12 +45,15 @@ const S = {
     border-radius: 16px;
     grid-template-columns: 1fr;
     gap: 20px;
-    padding: 20px 0;
+    padding: 20px;
     max-width: 400px;
     background-color: ${color.white};
-
-    & * {
-      padding: 0 20px;
-    }
+    border: 1px solid #000;
+    box-sizing: border-box;
+  `,
+  AnswerActions: styled('div')`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   `,
 };
