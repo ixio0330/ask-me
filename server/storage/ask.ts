@@ -48,7 +48,7 @@ const AskStorage = {
           const returnData = {
             ...docData,
             id: mv.id,
-            ask: docData.deny ? '비공개 처리된 질문입니다.' : docData.ask,
+            ask: docData.deny ? '비공개 처리된 질문입니다.' : docData.ask, // TODO 데이터 전송 X
             reply: docData.deny ? null : docData.reply,
             createdAt: docData.createdAt.toDate().toISOString(),
             replyedAt: docData.replyedAt? docData.replyedAt.toDate().toISOString() : undefined,
