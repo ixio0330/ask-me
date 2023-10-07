@@ -1,15 +1,9 @@
-import UsersController from '@/server/controllers/users';
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { Method } from '@/server/controllers/users';
-import errorHandler from '@/server/middleware/errorHandler';
-import { BadRequest, CustomError, NotFound } from '@/server/error';
+import { BadRequest, NotFound } from '@/server/error';
 import UsersStorage from '@/server/storage/users';
-import { NextRequest } from "next/server";
+import { responseErrorHandler } from '@/server/middleware/errorHandler';
 
-export async function GET(req: NextRequest) {
+export async function GET(req: Request, { params: { screenName } } : { params: { screenName: string }}) {
   try {
-    const screenName = req.nextUrl.searchParams.get('screenName');
-
     if (screenName === undefined || screenName === null) {
       throw new BadRequest('screenName이 누락되었습니다.');
     }
@@ -21,9 +15,6 @@ export async function GET(req: NextRequest) {
 
     return Response.json(findResult);
   } catch (error: unknown) {
-    if (error instanceof CustomError) {
-      return Response.json({ message: error.message });
-    }
-    return Response.json({ message: '알 수 없는 오류가 발생했습니다.' })
+    return responseErrorHandler(error);
   }
 }
