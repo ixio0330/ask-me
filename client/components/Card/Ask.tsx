@@ -3,6 +3,7 @@ import color from "@/client/color";
 import Typography from "../Typography";
 import { InAskClient } from "@/common/models/ask";
 import convertDateToString from "@/common/utils/convert_date";
+import Reply from "../Typography/Reply";
 
 const Ask = ({ ask, replyedAt, reply, deny }: InAskClient) => {
 
@@ -10,6 +11,7 @@ const Ask = ({ ask, replyedAt, reply, deny }: InAskClient) => {
     if (deny) {
       return <Typography size='s' weight='b'>{reply}</Typography>
     }
+
     if (!reply) {
       return (
         <>
@@ -23,6 +25,7 @@ const Ask = ({ ask, replyedAt, reply, deny }: InAskClient) => {
         </>
       )
     }
+    
     if (replyedAt) {
       return (
         <>
@@ -34,7 +37,7 @@ const Ask = ({ ask, replyedAt, reply, deny }: InAskClient) => {
             >
               {convertDateToString(replyedAt)}
             </Typography>
-            <S.Answer size='s'>{reply}</S.Answer>
+            <Reply>{reply}</Reply>
           </div>
         </>
       )
@@ -67,11 +70,5 @@ const S = {
     & div {
       padding: 0;
     }
-  `,
-  Answer: styled(Typography)`
-    margin: 0;
-    border-left: 4px solid ${color.primary};
-    padding-left: 16px;
-    margin-top: 4px;
   `,
 };

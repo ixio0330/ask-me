@@ -1,12 +1,14 @@
-import styled from "@emotion/styled";
+import styled from "@emotion/styled"
 import color from "@/client/color";
-import Typography from "../Typography";
 import { InAskClient } from "@/common/models/ask";
+import convertDateToString from "@/common/utils/convert_date";
+import Typography from "../Typography";
 import Switch from "../Switch";
 import Input from "../Input";
 import Button from "../Button";
+import Reply from "../Typography/Reply";
 
-const Answer = ({ ask, deny, reply }: InAskClient) => {
+const Answer = ({ ask, deny, reply, replyedAt }: InAskClient) => {
   const render = () => {
     if (deny) {
       return (
@@ -16,15 +18,33 @@ const Answer = ({ ask, deny, reply }: InAskClient) => {
         </>
       );
     }
+
     if (!reply) {
       return (
         <>
-          <Typography size='s' weight='b'>{ask}</Typography>
+          <Typography size='s' weight='b' className={C.paddingX}>{ask}</Typography>
           <Input placeholder='답변을 입력해주세요' />
           <S.AnswerActions>
             <Switch label='공개' active={!deny} />
             <Button>등록</Button>
           </S.AnswerActions>
+        </>
+      )
+    }
+
+    if (replyedAt) {
+      return (
+        <>
+          <Typography size='s' weight='b' >{ask}</Typography>
+          <div>
+            <Typography 
+              size='ex' 
+              style={{ color: color.secondary }}
+            >
+              {convertDateToString(replyedAt)}
+            </Typography>
+            <Reply>{reply}</Reply>
+          </div>
         </>
       )
     }
@@ -45,7 +65,7 @@ const S = {
     border-radius: 16px;
     grid-template-columns: 1fr;
     gap: 20px;
-    padding: 20px;
+    padding: 20px 0;
     max-width: 400px;
     background-color: ${color.white};
     border: 1px solid #000;
