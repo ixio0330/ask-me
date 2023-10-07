@@ -42,16 +42,16 @@ const Ask = ({ ask, replyedAt, reply, deny }: InAskClient) => {
   };
 
   return (
-    <S.AskItem>
+    <S.Ask>
       {render()}
-    </S.AskItem>
+    </S.Ask>
   );
 };
 
 export default Ask;
 
 const S = {
-  AskItem: styled('li')`
+  Ask: styled('li')`
     display: grid;
     border-radius: 16px;
     grid-template-columns: 1fr;
