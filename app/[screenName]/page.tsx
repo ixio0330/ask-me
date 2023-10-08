@@ -1,7 +1,7 @@
 import { use } from "react";
 import { InAuthUser } from "@/common/models/in_auth_user";
 import NotFoundPage from "../not-found";
-import UserHomePage from "@/client/components/user_home";
+import UserHome from "@/client/components/User/Home";
 import axios from 'axios';
 
 export default function UserHomeContainer({ params }: { params: { screenName: string } }) {
@@ -11,7 +11,7 @@ export default function UserHomeContainer({ params }: { params: { screenName: st
     return <NotFoundPage />
   }
   
-  return <UserHomePage userInfo={userInfo}/>
+  return <UserHome userInfo={userInfo}/>
 };
 
 async function getUserInfo(screenName: string) {

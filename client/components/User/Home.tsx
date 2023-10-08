@@ -1,17 +1,17 @@
 'use client'
 
-import AppLayout from "./App/Layout";
-import { Avatar, Box, Button, Heading, Text, useToast, VStack } from "@chakra-ui/react";
+import styled from "@emotion/styled";
+import AppLayout from "../App/Layout";
+import Bio from "../Card/Bio";
+import Ask from "../Card/Ask";
+import { useToast } from "@chakra-ui/react";
 import { useEffect, useState, useRef, useCallback } from "react";
-import color from "@/client/color";
 import { useAuth } from "@/client/context/auth_user";
 import { InAuthUser } from "@/common/models/in_auth_user";
 import { InAskClient } from "@/common/models/ask";
 import AskApi from "@/client/api/ask";
-import AskItem from "@/client/components/ask_item";
-import AskForm from "@/client/components/ask_form";
 
-export default function UserHomePage({ userInfo }: { userInfo: InAuthUser }) {
+const UserHome = ({ userInfo }: { userInfo: InAuthUser }) => {
   const [askList, setAskList] = useState<InAskClient[]>([]);
   const [askListFetchTrigger, setAskListFetchTrigger] = useState(false);
   const offset = useRef(0);
@@ -80,76 +80,16 @@ export default function UserHomePage({ userInfo }: { userInfo: InAuthUser }) {
     <AppLayout
       title={userInfo.displayName || 'User Home'}
     >
-      <Box
-        width='full'
-        mx='auto'
-        mt='8'
-        bg={color.white}
-        borderRadius='lg'
-        padding='20px'
-        pos='relative'
-        textAlign='center'
-      >
-        <Box
-          background={color.white}
-          pos='absolute'
-          left='calc(50% - 30px)'
-          top='-8'
-          width='60px' 
-          height='60px'
-          borderRadius='50%'
-          display='flex'
-          alignItems='center'
-          justifyContent='center'
-        >
-          <Avatar 
-            size='md' 
-            src={userInfo.photoURL ?? ''} 
-            background={color.primary}
-          />
-        </Box>
-        <Box>
-          <Heading my='3' size='md'>{userInfo.displayName}</Heading>
-          <Text>안녕하세요 {userInfo.displayName}입니다.</Text>
-          {
-            userInfo.uid !== authUser?.uid &&
-            <AskForm 
-              userInfo={userInfo}
-              authUser={authUser}
-              onSendComplete={setTrigger}
-            /> 
-          }
-        </Box>
-      </Box>
-      <VStack spacing='12px' mt='3'>
-        {
-          askList.map((item, index) => (
-            <AskItem 
-              key={`ask-item-${index}`}
-              item={item}
-              uid={userInfo.uid}
-              displayName={userInfo.displayName}
-              photoURL={userInfo.photoURL}
-              isOwner={userInfo.uid === authUser?.uid}
-              onSendComplete={() => fetchAsk(userInfo?.uid, item.id)}
-              onUpdateDenyComplete={updateAsk}
-            />
-          ))
-        }
-      </VStack>
+      <Bio 
+        {...userInfo}
+        status={userInfo.uid !== authUser?.uid ? 'visitor' : 'owner'}
+        bio={`안녕하세요, ${userInfo.displayName}입니다`}
+      />
       {
-        pageLeft && 10 <= askList.length && 
-          <Button
-            width='full'
-            mt='4'
-            bg={color.primary} 
-            color={color.white}
-            colorScheme='none'
-            onClick={() => onClickMore(userInfo?.uid)}
-          >
-            더보기
-          </Button>
+        askList.map((ask, index) => <Ask {...ask} key={`ask-${index}`} />)
       }
     </AppLayout>
   )
 };
+
+export default UserHome;
