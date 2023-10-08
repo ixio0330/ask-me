@@ -15,7 +15,7 @@ const Answer = ({ ask, deny, reply, replyedAt }: InAskClient) => {
     if (deny) {
       return (
         <>
-          <Typography className={C.paddingX20} size='s' weight='b'>{reply}</Typography>
+          <Typography className={C.paddingX20} size='s' weight='b'>{ask}</Typography>
           <Switch className={C.paddingX20} label='공개' active={!deny} />
         </>
       );

@@ -11,7 +11,7 @@ const Ask = ({ ask, replyedAt, reply, deny }: InAskClient) => {
   const render = () => {
     // Deny
     if (deny) {
-      return <Typography className={C.paddingX20} size='s' weight='b'>{reply}</Typography>
+      return <Typography className={C.paddingX20} size='s' weight='b'>{ask}</Typography>
     }
 
     // Pending

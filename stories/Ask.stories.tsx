@@ -26,8 +26,7 @@ export const Pending: Story = {
 
 export const Deny: Story = {
   args: {
-    ask: '법률은 특별한 규정이 없는 한 공포한 날로부터 20일을 경과함으로써 효력을 발생한다',
+    ask: '비공개 처리된 질문입니다',
     deny: true,
-    reply: '비공개 처리 된 질문입니다',
   }
 };
