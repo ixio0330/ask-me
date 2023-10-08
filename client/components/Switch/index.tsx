@@ -6,11 +6,12 @@ export interface SwitchProps {
   active: boolean;
   onClick?: () => void;
   label?: string;
+  className?: string;
 }
 
-const Switch = ({ active, label, onClick }: SwitchProps) => {
+const Switch = ({ active, label, onClick, className }: SwitchProps) => {
   return (
-    <S.SwitchContainer onClick={onClick}>
+    <S.SwitchContainer onClick={onClick} className={className}>
       {
         label && 
           <Typography 
