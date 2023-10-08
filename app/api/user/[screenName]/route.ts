@@ -1,6 +1,7 @@
 import { BadRequest, NotFound } from '@/server/error';
 import UsersStorage from '@/server/storage/users';
 import { responseErrorHandler } from '@/server/middleware/errorHandler';
+import { NextResponse } from 'next/server';
 
 export async function GET(req: Request, { params: { screenName } } : { params: { screenName: string }}) {
   try {
@@ -13,7 +14,7 @@ export async function GET(req: Request, { params: { screenName } } : { params: {
       throw new NotFound('존재하지 않는 사용자입니다.');
     }
 
-    return Response.json(findResult);
+    return NextResponse.json(findResult);
   } catch (error: unknown) {
     return responseErrorHandler(error);
   }

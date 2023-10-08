@@ -2,7 +2,7 @@
 import { BadRequest, InternalServerError } from '@/server/error';
 import { responseErrorHandler } from '@/server/middleware/errorHandler';
 import UsersStorage from '@/server/storage/users';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
     if (!addResult.result) {
       throw new InternalServerError(addResult.message);
     }
-    return addResult;
+    return NextResponse.json(addResult, { status: 200 });
   } catch (error) {
     return responseErrorHandler(error);
   }

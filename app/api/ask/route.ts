@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
     if (!getResult.result) {
       throw new InternalServerError(getResult.message);
     }
-    return Response.json(getResult.data, { status: 200 });
+    return NextResponse.json(getResult.data, { status: 200 });
   } catch (error) {
     return responseErrorHandler(error);
   }
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
     if (!addResult.result) {
       throw new InternalServerError(addResult.message);
     }
-    return Response.json(addResult, { status: 200 });
+    return NextResponse.json(addResult, { status: 200 });
   } catch(error) {
     return responseErrorHandler(error);
   }
@@ -94,7 +94,7 @@ export async function PUT(req: NextRequest) {
     if (!addResult.result) {
       throw new InternalServerError(addResult.message);
     }
-    return addResult.data;
+    return NextResponse.json(addResult.data, { status: 200 });
   } catch(error) {
     return responseErrorHandler(error);
   }
