@@ -51,5 +51,6 @@ const S = {
     max-width: 400px;
     height: 100%;
     margin: 0 auto;
+    padding: 0 8px;
   `,
 };
