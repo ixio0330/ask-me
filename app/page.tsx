@@ -2,7 +2,7 @@
 
 import { NextPage } from 'next';
 import { Box, Heading, Flex, Text } from '@chakra-ui/react';
-import GoogleLoginButton from '@/client/components/google_login_btn';
+import GoogleLoginButton from '@/client/components/Button/GoogleLoginButton';
 import { useAuth } from '@/client/context/auth_user';
 import AppLayout from '@/client/components/App/Layout';
 
