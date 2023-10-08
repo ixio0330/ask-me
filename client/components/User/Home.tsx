@@ -94,7 +94,7 @@ const UserHome = ({ userInfo }: { userInfo: InAuthUser }) => {
         {
           pageLeft && 10 <= askList.length && (
             <Button
-              onClick={() => onClickMore(userInfo?.uid)}
+              onClick={() => userInfo?.uid && onClickMore(userInfo?.uid)}
             >
               더보기
             </Button>
