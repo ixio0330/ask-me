@@ -74,7 +74,6 @@ const S = {
     padding: 20px 0;
     max-width: 400px;
     background-color: ${color.white};
-    border: 1px solid #000;
     box-sizing: border-box;
   `,
   AnswerActions: styled('div')`

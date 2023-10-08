@@ -111,7 +111,6 @@ const S = {
   Bio: styled('div')`
     display: grid;
     border-radius: 16px;
-    border: 1px solid #ddd;
     grid-template-columns: 1fr;
     gap: 20px;
     background-color: ${color.white};
