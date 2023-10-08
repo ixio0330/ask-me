@@ -6,6 +6,9 @@ const nextConfig = {
     authDomain: process.env.FIREBASE_AUTH_HOST || '',
     projectId: process.env.projectId || '',
   },
+  images: {
+    domains: ['lh3.googleusercontent.com'],
+  },
 }
 
 module.exports = nextConfig
