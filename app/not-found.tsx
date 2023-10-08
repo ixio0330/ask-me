@@ -2,8 +2,10 @@
 
 import { useRouter } from 'next/navigation';
 import AppLayout from '@/client/components/App/Layout';
-import { Box, Heading, Flex, Text, Button } from '@chakra-ui/react';
-import color from '@/client/color';
+import Image from 'next/image';
+import Stack from '@/client/components/Stack';
+import Typography from '@/client/components/Typography';
+import Button from '@/client/components/Button';
 
 const NotFound = () => {
   const router = useRouter();
@@ -12,30 +14,18 @@ const NotFound = () => {
     <AppLayout 
       title='Ask Me'
     >
-      <Box maxW='md' mt='20'>
-        <img src='/logo.svg' alt='로고' />
-        <Flex 
-          align='center'
-          justify='center' 
-          direction='column'
-          mt='10'
-        >
-          <Heading>Ask Me</Heading>
-          <Text mt='2'>존재하지 않는 사용자입니다.</Text>
-        </Flex>
-      </Box>
-      <Box mt='20'>
-      <Button
-          width='full'
-          mt='4'
-          bg={color.primary} 
-          color={color.white}
-          colorScheme='none'
-          onClick={() => router.back()}
-        >
-          돌아가기
-        </Button>
-      </Box>
+      <Stack style={{ marginTop: 100, textAlign: 'center' }}>
+        <Image 
+          style={{ margin: '0 auto' }} 
+          src='/logo.svg' 
+          alt='로고' 
+          width={320} 
+          height={320} 
+        />
+        <Typography size='l' weight='b'>Ask Me</Typography>
+        <Typography>존재하지 않는 사용자입니다</Typography>
+        <Button onClick={() => router.back()}>돌아가기</Button>
+      </Stack>
     </AppLayout>
   )
 }
