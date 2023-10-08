@@ -1,9 +1,9 @@
 'use client'
 
-import styled from "@emotion/styled";
 import AppLayout from "../App/Layout";
 import Bio from "../Card/Bio";
 import Ask from "../Card/Ask";
+import Stack from "../Stack";
 import { useToast } from "@chakra-ui/react";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useAuth } from "@/client/context/auth_user";
@@ -80,14 +80,16 @@ const UserHome = ({ userInfo }: { userInfo: InAuthUser }) => {
     <AppLayout
       title={userInfo.displayName || 'User Home'}
     >
-      <Bio 
-        {...userInfo}
-        status={userInfo.uid !== authUser?.uid ? 'visitor' : 'owner'}
-        bio={`안녕하세요, ${userInfo.displayName}입니다`}
-      />
-      {
-        askList.map((ask, index) => <Ask {...ask} key={`ask-${index}`} />)
-      }
+      <Stack style={{padding: '20px 0'}}>
+        <Bio 
+          {...userInfo}
+          status={userInfo.uid !== authUser?.uid ? 'visitor' : 'owner'}
+          bio={`안녕하세요, ${userInfo.displayName}입니다`}
+        />
+        {
+          askList.map((ask, index) => <Ask {...ask} key={`ask-${index}`} />)
+        }
+      </Stack>
     </AppLayout>
   )
 };
