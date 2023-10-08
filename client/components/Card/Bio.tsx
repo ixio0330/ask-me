@@ -58,8 +58,8 @@ const Bio = (
             <Typography>{bio}</Typography>
             <Input 
               placeholder={placeholder ?? '무엇이 궁금한가요?'}
-              value={value}
-              onChange={onChange} 
+              value={ask}
+              onChange={(e) => setAsk(e.target.value)} 
             />
             <Button 
               onClick={onClickSend}
