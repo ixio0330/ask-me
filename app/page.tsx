@@ -25,7 +25,7 @@ const IndexPage: NextPage = () => {
         />
         <Typography size='l' weight='b'>Ask Me</Typography>
         <Typography>궁금한 것이 있으면 물어보세요!</Typography>
-        <GoogleLoginButton onClick={signInWithGoogle}>Google로 시작하기</GoogleLoginButton>
+        <GoogleLoginButton onClick={signInWithGoogle} />
       </Stack>
     </AppLayout>
   )

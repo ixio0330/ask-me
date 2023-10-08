@@ -1,16 +1,18 @@
 import styled from "@emotion/styled";
 import { ComponentProps } from "react";
-import Typography from "../Typography";
 import color from "@/client/color";
+import { fontsize, fontweight } from "../Typography";
 
 interface ButtonProps extends ComponentProps<'button'> {
-  variant?: 'fill' | 'outlined'
+  variant?: 'fill' | 'outlined';
+  size?: keyof typeof fontsize;
+  weight?: keyof typeof fontweight;
 }
 
 const Button = ({ children, variant = 'fill', ...props }: ButtonProps) => {
   return (
     <S.Button variant={variant} {...props}>
-      <Typography size='s' weight='b' >{children}</Typography>
+      {children}
     </S.Button>
   )
 };
@@ -19,7 +21,7 @@ export default Button;
 
 const S = {
   Button: styled('button')<ButtonProps>`
-    display: inline-flex;
+    display: flex;
     padding: 12px 24px;
     justify-content: center;
     align-items: center;
@@ -28,5 +30,7 @@ const S = {
     color: ${({ variant }) => variant === 'fill' ? color.background : color.primary};
     border: 1px solid ${color.primary};
     border-radius: 4px;
+    font-size: ${({ size }) => size ? fontsize[size] : fontsize.s};
+    font-weight: ${({ weight }) => weight ? fontweight[weight] : fontweight.b};
   `,
 };

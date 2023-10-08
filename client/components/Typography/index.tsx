@@ -29,7 +29,7 @@ const S = {
 };
 
 // 사이즈
-const fontsize = {
+export const fontsize = {
   l: '20px',
   m: '16px',
   s: '14px',
@@ -37,7 +37,7 @@ const fontsize = {
 };
 
 // 굵기
-const fontweight= {
+export const fontweight= {
   l: 'light', //300
   r: 'regular', // 400
   m: 'medium', // 500
