@@ -1,6 +1,6 @@
 'use client'
 
-import ServiceLayout from "@/client/layout/service_layout";
+import AppLayout from "./App/Layout";
 import { Avatar, Box, Button, Heading, Text, useToast, VStack } from "@chakra-ui/react";
 import { useEffect, useState, useRef, useCallback } from "react";
 import color from "@/client/color";
@@ -77,10 +77,8 @@ export default function UserHomePage({ userInfo }: { userInfo: InAuthUser }) {
   }, [userInfo, askListFetchTrigger]);
 
   return (
-    <ServiceLayout
+    <AppLayout
       title={userInfo.displayName || 'User Home'}
-      backgroundColor={color.tertiary}
-      minH='100vh'
     >
       <Box
         width='full'
@@ -152,6 +150,6 @@ export default function UserHomePage({ userInfo }: { userInfo: InAuthUser }) {
             더보기
           </Button>
       }
-    </ServiceLayout>
+    </AppLayout>
   )
 };

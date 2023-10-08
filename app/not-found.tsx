@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation';
-import ServiceLayout from '@/client/layout/service_layout';
+import AppLayout from '@/client/components/App/Layout';
 import { Box, Heading, Flex, Text, Button } from '@chakra-ui/react';
 import color from '@/client/color';
 
@@ -9,10 +9,8 @@ const NotFound = () => {
   const router = useRouter();
 
   return (
-    <ServiceLayout 
+    <AppLayout 
       title='Ask Me'
-      backgroundColor={color.tertiary}
-      minH='100vh'
     >
       <Box maxW='md' mt='20'>
         <img src='/logo.svg' alt='로고' />
@@ -38,7 +36,7 @@ const NotFound = () => {
           돌아가기
         </Button>
       </Box>
-    </ServiceLayout>
+    </AppLayout>
   )
 }
 
