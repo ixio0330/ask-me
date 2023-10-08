@@ -11,7 +11,7 @@ interface AddResponse {
 
 const UsersStorage = {
   // * 사용자 등록
-  async add({uid, email, displayName, photoURL}: InAuthUser): Promise<AddResponse> {
+  async add({ uid = '', email = '', displayName = '', photoURL = '' }: InAuthUser): Promise<AddResponse> {
     // 신규가입 불가
     try {
       const checkUserExist = await firebaseAdmin.Firebase.collection(USER_COL).doc(uid).get();
@@ -21,7 +21,7 @@ const UsersStorage = {
       throw new Error();
     }
     catch (error) {
-      return { result: false, message: '현재는 신규 가입을 할 수 없습니다.'}
+      return { result: false, message: '현재는 신규 가입을 할 수 없습니다.' }
     }
     try {
       const addResult = await firebaseAdmin.Firebase.runTransaction(async (transection) => {
@@ -53,7 +53,7 @@ const UsersStorage = {
       return { result: true, data: uid };
     } catch (error) {
       console.log(error);
-      return { result: false, message: '사용자 등록에 실패했습니다.'}
+      return { result: false, message: '사용자 등록에 실패했습니다.' }
     }
   },
   // * 사용자 ScreenName으로 조회
