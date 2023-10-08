@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { ReactNode } from "react";
 import { Box, BoxProps } from "@chakra-ui/react";
-import AppHeader from "../components/app_header";
+import AppHeader from "../components/App/Header";
 
 interface Props {
   title: string;
