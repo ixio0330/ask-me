@@ -5,14 +5,15 @@ import Button from "../Button";
 import Typography from "../Typography";
 import { InAuthUser } from "@/common/models/in_auth_user";
 import Image from 'next/image'
-import { ComponentProps } from "react";
+import { ComponentProps, useState } from "react";
+import AskApi from "@/client/api/ask";
 
 export type BioStatus = 'visitor' | 'owner' | 'update';
 
-export interface BioProps extends Pick<InAuthUser, 'displayName' | 'photoURL'>, ComponentProps<'input'> {
+export interface BioProps extends InAuthUser, ComponentProps<'input'> {
   status?: BioStatus;
   bio: string;
-  onClickSend?: () => void;
+  onSendComplete?: () => void;
   onClickUpdateBio?: () => void;
   onClickSaveBio?: () => void;
   onClickCancel?: () => void;
@@ -23,16 +24,31 @@ const Bio = (
     status = 'visitor', 
     bio,
     photoURL, 
+    uid,
     displayName, 
     value, 
     placeholder, 
     onChange, 
-    onClickSend,
+    onSendComplete,
     onClickUpdateBio,
     onClickSaveBio,
     onClickCancel,
   }: BioProps
 ) => {
+  const [ask, setAsk] = useState('');
+  const onClickSend = async () => {
+    const res = await AskApi.post({ 
+      uid: uid as string, 
+      ask, 
+      author: null,
+    });
+    if (!res?.result) {
+      console.log(res);
+      return;
+    }
+    setAsk('');
+    onSendComplete && onSendComplete();
+  };
 
   const render = () => {
     switch (status) {

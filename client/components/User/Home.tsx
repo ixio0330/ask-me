@@ -10,6 +10,7 @@ import { useAuth } from "@/client/context/auth_user";
 import { InAuthUser } from "@/common/models/in_auth_user";
 import { InAskClient } from "@/common/models/ask";
 import AskApi from "@/client/api/ask";
+import Button from "../Button";
 
 const UserHome = ({ userInfo }: { userInfo: InAuthUser }) => {
   const [askList, setAskList] = useState<InAskClient[]>([]);
@@ -85,9 +86,19 @@ const UserHome = ({ userInfo }: { userInfo: InAuthUser }) => {
           {...userInfo}
           status={userInfo.uid !== authUser?.uid ? 'visitor' : 'owner'}
           bio={`안녕하세요, ${userInfo.displayName}입니다`}
+          onSendComplete={setTrigger}
         />
         {
           askList.map((ask, index) => <Ask {...ask} key={`ask-${index}`} />)
+        }
+        {
+          pageLeft && 10 <= askList.length && (
+            <Button
+              onClick={() => onClickMore(userInfo?.uid)}
+            >
+              더보기
+            </Button>
+          )
         }
       </Stack>
     </AppLayout>
