@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { css } from "@emotion/css";
 import color from "@/client/color";
 import Typography from "../Typography";
 import { InAskClient } from "@/common/models/ask";
@@ -8,15 +9,18 @@ import Reply from "../Typography/Reply";
 const Ask = ({ ask, replyedAt, reply, deny }: InAskClient) => {
 
   const render = () => {
+    // Deny
     if (deny) {
-      return <Typography size='s' weight='b'>{reply}</Typography>
+      return <Typography className={C.paddingX20} size='s' weight='b'>{reply}</Typography>
     }
 
+    // Pending
     if (!reply) {
       return (
         <>
-          <Typography size='s' weight='b' >{ask}</Typography>
+          <Typography className={C.paddingX20} size='s' weight='b' >{ask}</Typography>
           <Typography 
+          className={C.paddingX20}
           size='ex' 
           style={{ color: color.secondary }}
         >
@@ -29,15 +33,16 @@ const Ask = ({ ask, replyedAt, reply, deny }: InAskClient) => {
     if (replyedAt) {
       return (
         <>
-          <Typography size='s' weight='b' >{ask}</Typography>
+          <Typography className={C.paddingX20} size='s' weight='b' >{ask}</Typography>
           <div>
             <Typography 
+              className={C.paddingX20}
               size='ex' 
               style={{ color: color.secondary }}
             >
               {convertDateToString(replyedAt)}
             </Typography>
-            <Reply>{reply}</Reply>
+            <Reply className={C.paddingX20}>{reply}</Reply>
           </div>
         </>
       )
@@ -62,13 +67,12 @@ const S = {
     padding: 20px 0;
     max-width: 400px;
     background-color: ${color.white};
+    border: 1px solid #ddd;
+  `,
+};
 
-    & * {
-      padding: 0 20px;
-    }
-
-    & div {
-      padding: 0;
-    }
+const C = {
+  paddingX20: css`
+    padding: 0 20px;
   `,
 };
