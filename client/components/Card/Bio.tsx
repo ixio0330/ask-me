@@ -94,11 +94,11 @@ const Bio = (
       <S.UserProfile>
         <S.UserProfileImage 
           src={photoURL ?? ''} 
-          width={60} 
-          height={60} 
+          width={48} 
+          height={48} 
           alt={`${displayName} 프로필 이미지`} 
         />
-        <Typography size='l' weight='b'>{displayName}</Typography>
+        <Typography weight='b'>{displayName}</Typography>
       </S.UserProfile>
       {render()}
     </S.Bio>
