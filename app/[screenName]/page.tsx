@@ -24,9 +24,7 @@ async function getUserInfo(screenName: string) {
     const host = process.env.HOST || 'localhost';
     const port = process.env.PORT || 3000;
     const baseUrl = `${protocol}://${host}:${port}`;
-    console.log(baseUrl, screenName);
     const userInfo = await axios.get(`${baseUrl}/api/user/${screenName}`);
-    console.log(userInfo);
     return userInfo.data as InAuthUser ?? null;
   } catch (error) {
     return null;
