@@ -4,7 +4,6 @@ import AppLayout from "../App/Layout";
 import Bio from "../Card/Bio";
 import Ask from "../Card/Ask";
 import Stack from "../Stack";
-import { useToast } from "@chakra-ui/react";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useAuth } from "@/client/context/auth_user";
 import { InAuthUser } from "@/common/models/in_auth_user";
@@ -18,16 +17,12 @@ const UserHome = ({ userInfo }: { userInfo: InAuthUser }) => {
   const offset = useRef(0);
   const [pageLeft, setPageLeft] = useState(true);
   const { authUser } = useAuth();
-  const toast = useToast();
 
   const fetchAllAsks = async (uid: string | undefined) => {
     if (!uid) return;
     const fetchResult = await AskApi.getAll(uid, 0);
     if (!fetchResult.result) {
-      toast({
-        title: fetchResult?.message,
-        position: 'top-right',
-      });
+      window.alert(fetchResult.message);
       return;
     }
     setAskList(fetchResult?.data as InAskClient[]);
@@ -39,10 +34,7 @@ const UserHome = ({ userInfo }: { userInfo: InAuthUser }) => {
     if (!uid || !askId) return;
     const fetchResult = await AskApi.getById(uid, askId);
     if (!fetchResult.result || !fetchResult.data) {
-      toast({
-        title: fetchResult?.message,
-        position: 'top-right',
-      });
+      window.alert(fetchResult.message);
       return;
     }
     updateAsk(fetchResult.data?.id, fetchResult.data);
@@ -60,10 +52,7 @@ const UserHome = ({ userInfo }: { userInfo: InAuthUser }) => {
     if (!uid) return;
     const fetchResult = await AskApi.getAll(uid, offset.current);
     if (!fetchResult.result) {
-      toast({
-        title: fetchResult?.message,
-        position: 'top-right',
-      });
+      window.alert(fetchResult.message);
       return;
     }
     if (fetchResult.data?.length === 0) {

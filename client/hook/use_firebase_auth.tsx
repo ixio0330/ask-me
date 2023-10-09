@@ -6,13 +6,11 @@ import { GoogleAuthProvider, signInWithPopup, User } from 'firebase/auth';
 import firebaseClient from '@/common/firebase/client';
 import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
-import { useToast } from "@chakra-ui/react";
 
 const uesFirebaseAuth = () => {
   const [authUser, setAuthUser] = useState<InAuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const toast = useToast();
 
   /**
    * Google 로그인
@@ -57,11 +55,7 @@ const uesFirebaseAuth = () => {
       setLoading(false);
     } catch (error) {
       if (error instanceof AxiosError) {
-        toast({
-          title: error.response?.data.message ?? '로그인 중 오류가 발생했습니다.',
-          position: 'top-right',
-          colorScheme: 'red',
-        });
+        window.alert(error.response?.data.message ?? '로그인 중 오류가 발생했습니다.');
       }
     }
   };
