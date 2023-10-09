@@ -25,6 +25,7 @@ const S = {
   AppContent: styled('section')`
     max-width: 400px;
     margin: 0 auto;
-    padding: 0 8px;
+    padding: 0 16px;
+    box-sizing: border-box;
   `,
 };
