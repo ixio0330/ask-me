@@ -1,5 +1,6 @@
 import firebaseAdmin from '@/common/firebase/admin';
 import { InAuthUser } from '@/common/models/in_auth_user';
+import { InternalServerError } from '../error';
 export const USER_COL = 'users';
 export const SCREEN_NAME_COL = 'screen_names';
 
@@ -18,10 +19,10 @@ const UsersStorage = {
       if (checkUserExist.exists) {
         return { result: true, data: uid };
       }
-      throw new Error();
+      return { result: false, message: '현재는 신규 가입을 할 수 없습니다.' }
     }
     catch (error) {
-      return { result: false, message: '현재는 신규 가입을 할 수 없습니다.' }
+      return { result: false, message: '서버 내부 오류가 발생했습니다.' }
     }
     try {
       const addResult = await firebaseAdmin.Firebase.runTransaction(async (transection) => {
