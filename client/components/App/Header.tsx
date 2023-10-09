@@ -27,8 +27,8 @@ const AppHeader = () => {
         <Image 
           src='/logo.svg' 
           alt='로고' 
-          width={40}
-          height={40} 
+          width={32}
+          height={32} 
         />
         {render()}
       </S.AppHeaderActions>
