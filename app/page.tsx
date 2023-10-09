@@ -1,34 +1,20 @@
-'use client'
+import AppHome from "@/client/components/App/Home";
+import { Metadata } from "next";
 
-import { NextPage } from 'next';
-import GoogleLoginButton from '@/client/components/Button/GoogleLoginButton';
-import { useAuth } from '@/client/context/auth_user';
-import AppLayout from '@/client/components/App/Layout';
-import Image from 'next/image';
-import Stack from '@/client/components/Stack';
-import Typography from '@/client/components/Typography';
+export const metadata: Metadata = {
+  title: 'Ask Me',
+  description: 'Ask Me는 익명 질문 사이트입니다.',
+  authors: [{ 
+    name: '서나무',
+    url: 'https://github.com/ixio0330/ask-me',
+  }],
+  openGraph: {
+    title: 'Ask Me',
+    description: 'Ask Me는 익명 질문 사이트입니다.',
+    url: 'https://ask-me-s.vercel.app',
+  },
+};
 
-const IndexPage: NextPage = () => {
-  const { signInWithGoogle } = useAuth();
-  
-  return (
-    <AppLayout 
-      title='Ask Me'
-    >
-      <Stack style={{ marginTop: 100, textAlign: 'center' }}>
-        <Image 
-          style={{ margin: '0 auto' }} 
-          src='/logo.svg' 
-          alt='로고' 
-          width={240} 
-          height={240} 
-        />
-        <Typography size='l' weight='b'>Ask Me</Typography>
-        <Typography>궁금한 것이 있으면 물어보세요!</Typography>
-        <GoogleLoginButton onClick={signInWithGoogle} />
-      </Stack>
-    </AppLayout>
-  )
-}
+const IndexPage = () => <AppHome />
 
 export default IndexPage;

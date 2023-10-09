@@ -3,8 +3,22 @@ import { InAuthUser } from "@/common/models/in_auth_user";
 import NotFoundPage from "../not-found";
 import UserHome from "@/client/components/User/Home";
 import axios from 'axios';
+import { Metadata } from "next";
 
-export default function UserHomeContainer({ params }: { params: { screenName: string } }) {
+export async function generateMetadata({ params }: { params: { screenName: string } }): Promise<Metadata> {
+  const userInfo = await getUserInfo(params.screenName);
+ 
+  return {
+    title: userInfo ? `${userInfo?.displayName}의 질문함` : 'Ask Me',
+    description: 'Ask Me는 익명 질문 사이트입니다.',
+    authors: [{ 
+      name: '서나무',
+      url: 'https://github.com/ixio0330/ask-me',
+    }],
+  }
+}
+
+const UserHomePage = ({ params }: { params: { screenName: string } }) => {
   const userInfo = use(getUserInfo(params.screenName));
   
   if (userInfo === null) {
@@ -29,4 +43,6 @@ async function getUserInfo(screenName: string) {
   } catch (error) {
     return null;
   }
-}
+};
+
+export default UserHomePage;
