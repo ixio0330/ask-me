@@ -3,12 +3,13 @@ const palette = {
     black: '#000',
     white: '#fff',
     light: '#F6F6F6',
+    dark: '#343434',
   }
 };
 
 const theme = {
   light: {
-    primary: palette.global.black,
+    primary: palette.global.dark,
     secondary: 'rgba(0,0,0,0.4)',
     background: palette.global.light,
     card: palette.global.white,
