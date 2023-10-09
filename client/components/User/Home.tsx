@@ -1,7 +1,7 @@
 'use client'
 
 import AppLayout from "../App/Layout";
-import Bio from "../Card/Bio";
+import Bio, { BioStatus } from "../Card/Bio";
 import Ask from "../Card/Ask";
 import Stack from "../Stack";
 import { useEffect, useState, useRef, useCallback } from "react";
@@ -10,6 +10,7 @@ import { InAuthUser } from "@/common/models/in_auth_user";
 import { InAskClient } from "@/common/models/ask";
 import AskApi from "@/client/api/ask";
 import Button from "../Button";
+import Answer from "../Card/Answer";
 
 const UserHome = ({ userInfo }: { userInfo: InAuthUser }) => {
   const [askList, setAskList] = useState<InAskClient[]>([]);
@@ -17,6 +18,8 @@ const UserHome = ({ userInfo }: { userInfo: InAuthUser }) => {
   const offset = useRef(0);
   const [pageLeft, setPageLeft] = useState(true);
   const { authUser } = useAuth();
+  const isOwner = userInfo.uid === authUser?.uid;
+  const [status, setStatus] = useState<BioStatus>(isOwner ? 'owner' : 'visitor');
 
   const fetchAllAsks = async (uid: string | undefined) => {
     if (!uid) return;
@@ -66,17 +69,33 @@ const UserHome = ({ userInfo }: { userInfo: InAuthUser }) => {
     fetchAllAsks(userInfo?.uid);
   }, [userInfo, askListFetchTrigger]);
 
+  useEffect(() => {
+    setStatus(isOwner ? 'owner' : 'visitor');
+  }, [authUser?.uid]);
+
   return (
     <AppLayout>
       <Stack style={{padding: '20px 0'}}>
         <Bio 
           {...userInfo}
-          status={userInfo.uid !== authUser?.uid ? 'visitor' : 'owner'}
+          status={status}
           bio={`안녕하세요, ${userInfo.displayName}입니다`}
           onSendComplete={setTrigger}
+          onClickUpdateBio={() => setStatus('update')}
+          onClickCancel={() => setStatus('owner')}
         />
         {
-          askList.map((ask, index) => <Ask {...ask} key={`ask-${index}`} />)
+          isOwner 
+          ? askList.map((ask, index) => (
+            <Answer 
+              {...ask}
+              uid={userInfo.uid ?? ''}
+              key={`ask-${index}`} 
+              onSendComplete={() => fetchAsk(userInfo?.uid, ask.id)}
+              onUpdateDenyComplete={updateAsk}
+            />
+          ))
+          : askList.map((ask, index) => <Ask key={`ask-${index}`} {...ask}  />)
         }
         {
           pageLeft && 10 <= askList.length && (
