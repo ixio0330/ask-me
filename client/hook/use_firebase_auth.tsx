@@ -7,7 +7,7 @@ import firebaseClient from '@/common/firebase/client';
 import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
 
-const uesFirebaseAuth = () => {
+const useFirebaseAuth = () => {
   const [authUser, setAuthUser] = useState<InAuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -80,4 +80,4 @@ const uesFirebaseAuth = () => {
   }
 };
 
-export default uesFirebaseAuth;
+export default useFirebaseAuth;

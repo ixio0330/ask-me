@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext } from 'react';
 import { InAuthUser } from "@/common/models/in_auth_user";
-import uesFirebaseAuth from '../hook/use_firebase_auth';
+import useFirebaseAuth from '../hook/use_firebase_auth';
 
 interface InAuthUserContext {
   authUser: InAuthUser | null;
@@ -17,7 +17,7 @@ const AuthUserContext = createContext<InAuthUserContext>({
 });
 
 export const AuthUserProvider = ({children}: {children: ReactNode}) => {
-  const auth = uesFirebaseAuth();
+  const auth = useFirebaseAuth();
   return (
     <AuthUserContext.Provider value={auth}>
       { children }
