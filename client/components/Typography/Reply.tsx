@@ -12,7 +12,7 @@ const S = {
   Reply: styled(Typography)`
     margin: 0;
     border-left: 4px solid ${color.primary};
-    padding-left: 16px;
+    padding: 0 20px 0 16px;
     margin-top: 4px;
   `,
 };
