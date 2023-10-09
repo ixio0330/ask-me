@@ -67,9 +67,7 @@ const UserHome = ({ userInfo }: { userInfo: InAuthUser }) => {
   }, [userInfo, askListFetchTrigger]);
 
   return (
-    <AppLayout
-      title={userInfo.displayName || 'User Home'}
-    >
+    <AppLayout>
       <Stack style={{padding: '20px 0'}}>
         <Bio 
           {...userInfo}

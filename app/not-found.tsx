@@ -11,9 +11,7 @@ const NotFound = () => {
   const router = useRouter();
 
   return (
-    <AppLayout 
-      title='Ask Me'
-    >
+    <AppLayout>
       <Stack style={{ marginTop: 100, textAlign: 'center' }}>
         <Image 
           style={{ margin: '0 auto' }} 
