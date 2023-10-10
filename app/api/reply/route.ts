@@ -21,11 +21,11 @@ export async function POST(req: Request) {
     }
   
     const replyResult = await ReplyStorage.add(body);
-    if (!replyResult.result) {
+    if (!replyResult.success) {
       throw new InternalServerError(replyResult.message);
     }
 
-    return NextResponse.json(replyResult.data);
+    return NextResponse.json(replyResult);
   } catch (error: unknown) {
     return responseErrorHandler(error);
   }

@@ -6,7 +6,7 @@ import Typography from "../Typography";
 import { InAuthUser } from "@/common/models/in_auth_user";
 import Image from 'next/image'
 import { ComponentProps, useState } from "react";
-import AskApi from "@/client/api/ask";
+import { AskApi } from "@/client/api";
 
 export type BioStatus = 'visitor' | 'owner' | 'update';
 
@@ -42,8 +42,8 @@ const Bio = (
       ask, 
       author: null,
     });
-    if (!res?.result) {
-      console.log(res);
+    if (!res?.success) {
+      window.alert(res?.message);
       return;
     }
     setAsk('');

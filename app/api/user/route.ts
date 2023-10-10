@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     }
   
     const addResult = await UsersStorage.add(body);
-    if (!addResult.result) {
+    if (!addResult.success) {
       throw new BadRequest(addResult.message);
     }
     return NextResponse.json(addResult, { status: 200 });

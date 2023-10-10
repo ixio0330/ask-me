@@ -9,8 +9,7 @@ import Input from "../Input";
 import Button from "../Button";
 import Reply from "../Typography/Reply";
 import { useState } from "react";
-import AskApi from "@/client/api/ask";
-import ReplyApi from "@/client/api/reply";
+import { AskApi, ReplyApi } from "@/client/api";
 
 export interface AnswerProps extends InAskClient {
   onSendComplete?: () => void;
@@ -21,7 +20,7 @@ const Answer = ({ uid, id, ask, deny, reply, replyedAt, onSendComplete, onUpdate
   const [newReply, setNewReply] = useState('');
   const onClickPostReply = async () => {
     const postResult = await ReplyApi.post({ uid, askId: id, reply: newReply });
-    if (!postResult?.result) {
+    if (!postResult?.success) {
       window.alert(postResult?.message);
       return;
     }
@@ -31,7 +30,7 @@ const Answer = ({ uid, id, ask, deny, reply, replyedAt, onSendComplete, onUpdate
 
   const onUpdateDeny = async (uid: string, askId: string, deny: boolean) => {
     const fetchResult = await AskApi.putAskDeny(uid, askId, deny);
-    if (!fetchResult.result || !fetchResult.data) {
+    if (!fetchResult.success || !fetchResult.data) {
       window.alert(fetchResult?.message);
       return;
     }

@@ -14,7 +14,7 @@ const AskStorage = {
       try {
         const userDoc = await transection.get(userRef);
         if (!userDoc.exists) {
-          throw new BadRequest('존재하지 않는 사용자입니다.');
+          throw new BadRequest('존재하지 않는 사용자입니다');
         }
         const newAskRef = userRef.collection(ASK_COL).doc();
         const newAskBody = {
@@ -25,9 +25,9 @@ const AskStorage = {
           author: author ?? null,
         }
         await transection.set(newAskRef, newAskBody);
-        return { result: true, data: newAskBody };
+        return { success: true, data: newAskBody };
       } catch (error) {
-        return { result: false, message: '질문 등록에 실패했습니다.'};
+        return { success: false, message: '질문 등록에 실패했습니다'};
       }
     });
   },
@@ -38,7 +38,7 @@ const AskStorage = {
       try {
         const userDoc = await transection.get(userRef);
         if (!userDoc.exists) {
-          throw new BadRequest('존재하지 않는 사용자입니다.');
+          throw new BadRequest('존재하지 않는 사용자입니다');
         }
         const askCol = userRef.collection(ASK_COL).orderBy('createdAt', 'desc');
         const askColDoc = await transection.get(askCol);
@@ -55,9 +55,9 @@ const AskStorage = {
           } as InAskClient;
           return returnData;
         });
-        return { result: true, data };
+        return { success: true, data };
       } catch (error) {
-        return { result: false, message: '질문 조회에 실패했습니다.'};
+        return { success: false, message: '질문 조회에 실패했습니다'};
       }
     });
   },
@@ -71,16 +71,16 @@ const AskStorage = {
         const askDoc = await transection.get(askRef);
   
         if (!userDoc.exists) {
-          throw new BadRequest('존재하지 않는 사용자입니다.');
+          throw new BadRequest('존재하지 않는 사용자입니다');
         }
   
         if (!askDoc.exists) {
-          throw new BadRequest('존재하지 않는 질문입니다.');
+          throw new BadRequest('존재하지 않는 질문입니다');
         }
   
         const askData = askDoc.data() as InAskServer;
         return { 
-          result: true, 
+          success: true, 
           data: {
             ...askData,
             id: askId,
@@ -91,7 +91,7 @@ const AskStorage = {
           }
         };
       } catch (error) {
-        return { result: false, message: '질문을 조회하던 중 오류가 발생했습니다.'}
+        return { success: false, message: '질문을 조회하던 중 오류가 발생했습니다'}
       }
     });
   },
@@ -105,17 +105,17 @@ const AskStorage = {
         const askDoc = await transection.get(askRef);
   
         if (!userDoc.exists) {
-          throw new BadRequest('존재하지 않는 사용자입니다.');
+          throw new BadRequest('존재하지 않는 사용자입니다');
         }
   
         if (!askDoc.exists) {
-          throw new BadRequest('존재하지 않는 질문입니다.');
+          throw new BadRequest('존재하지 않는 질문입니다');
         }
   
         const askData = askDoc.data() as InAskServer;
         await transection.set(askRef, { ...askData, deny });
         return { 
-          result: true, 
+          success: true, 
           data: {
             ...askData,
             id: askId,
@@ -127,8 +127,7 @@ const AskStorage = {
           }
         };
       } catch (error) {
-        console.log(error);
-        return { result: false, message: '질문을 상태를 변경하던 중 오류가 발생했습니다.'}
+        return { success: false, message: '질문을 상태를 변경하던 중 오류가 발생했습니다'}
       }
     });
   }

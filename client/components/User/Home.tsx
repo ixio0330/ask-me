@@ -8,7 +8,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { useAuth } from "@/client/context/auth_user";
 import { InAuthUser } from "@/common/models/in_auth_user";
 import { InAskClient } from "@/common/models/ask";
-import AskApi from "@/client/api/ask";
+import { AskApi } from "@/client/api";
 import Button from "../Button";
 import Answer from "../Card/Answer";
 
@@ -24,11 +24,11 @@ const UserHome = ({ userInfo }: { userInfo: InAuthUser }) => {
   const fetchAllAsks = async (uid: string | undefined) => {
     if (!uid) return;
     const fetchResult = await AskApi.getAll(uid, 0);
-    if (!fetchResult.result) {
+    if (!fetchResult.success) {
       window.alert(fetchResult.message);
       return;
     }
-    setAskList(fetchResult.data as InAskClient[]);
+    fetchResult.data && setAskList(fetchResult.data);
   };
 
   const setTrigger = useCallback(() => setAskListFetchTrigger(!askListFetchTrigger), [askListFetchTrigger]);
@@ -36,7 +36,7 @@ const UserHome = ({ userInfo }: { userInfo: InAuthUser }) => {
   const fetchAsk = async (uid: string | undefined, askId: string) => {
     if (!uid || !askId) return;
     const fetchResult = await AskApi.getById(uid, askId);
-    if (!fetchResult.result || !fetchResult.data) {
+    if (!fetchResult.success || !fetchResult.data) {
       window.alert(fetchResult.message);
       return;
     }
@@ -54,7 +54,7 @@ const UserHome = ({ userInfo }: { userInfo: InAuthUser }) => {
     offset.current += 10;
     if (!uid) return;
     const fetchResult = await AskApi.getAll(uid, offset.current);
-    if (!fetchResult.result) {
+    if (!fetchResult.success) {
       window.alert(fetchResult.message);
       return;
     }

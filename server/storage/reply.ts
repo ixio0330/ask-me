@@ -17,21 +17,21 @@ const ReplyStorage = {
         const askDoc = await transection.get(askRef);
   
         if (!userDoc.exists) {
-          throw new BadRequest('존재하지 않는 사용자입니다.');
+          throw new BadRequest('존재하지 않는 사용자입니다');
         }
   
         if (!askDoc.exists) {
-          throw new BadRequest('존재하지 않는 질문입니다.');
+          throw new BadRequest('존재하지 않는 질문입니다');
         }
   
         const askData = askDoc.data() as InAskServer;
         if (askData.reply) {
-          throw new BadRequest('이미 답변을 작성한 질문입니다.');
+          throw new BadRequest('이미 답변을 작성한 질문입니다');
         }
         await transection.update(askRef, { reply, replyedAt: firestore.FieldValue.serverTimestamp() });
-        return { result: true, data: askData };  
+        return { success: true, data: askData };  
       } catch (error) {
-        return { result: false, message: '답변을 등록하던 중 오류가 발생했습니다.'}
+        return { success: false, message: '답변을 등록하던 중 오류가 발생했습니다'}
       }
     });
   },

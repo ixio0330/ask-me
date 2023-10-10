@@ -37,10 +37,10 @@ export async function GET(req: NextRequest) {
         isOwner: uid === tokenUid,
       });
     
-    if (!getResult.result) {
+    if (!getResult.success) {
       throw new InternalServerError(getResult.message);
     }
-    return NextResponse.json(getResult.data, { status: 200 });
+    return NextResponse.json(getResult, { status: 200 });
   } catch (error) {
     return responseErrorHandler(error);
   }
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
     }
   
     const addResult = await AskStorage.add(body);
-    if (!addResult.result) {
+    if (!addResult.success) {
       throw new InternalServerError(addResult.message);
     }
     return NextResponse.json(addResult, { status: 200 });
@@ -104,10 +104,10 @@ export async function PUT(req: NextRequest) {
     }
 
     const addResult = await AskStorage.updateAskStatus(body);
-    if (!addResult.result) {
+    if (!addResult.success) {
       throw new InternalServerError(addResult.message);
     }
-    return NextResponse.json(addResult.data, { status: 200 });
+    return NextResponse.json(addResult, { status: 200 });
   } catch(error) {
     return responseErrorHandler(error);
   }
