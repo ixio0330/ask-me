@@ -1,5 +1,5 @@
 import { BadRequest, InternalServerError } from '@/server/error';
-import { responseErrorHandler } from '@/server/middleware/errorHandler';
+import { responseErrorHandler } from '@/server/handler/errorHandler';
 import { NextResponse } from 'next/server';
 import ReplyStorage from '@/server/storage/reply';
 

@@ -1,4 +1,4 @@
-import { responseErrorHandler } from '@/server/middleware/errorHandler';
+import { responseErrorHandler } from '@/server/handler/errorHandler';
 import { NextRequest, NextResponse } from 'next/server';
 import { BadRequest, InternalServerError, NotValidToken } from '@/server/error';
 import AskStorage from '@/server/storage/ask';

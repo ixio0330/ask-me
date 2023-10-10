@@ -1,6 +1,6 @@
 
 import { BadRequest } from '@/server/error';
-import { responseErrorHandler } from '@/server/middleware/errorHandler';
+import { responseErrorHandler } from '@/server/handler/errorHandler';
 import UsersStorage from '@/server/storage/users';
 import { NextRequest, NextResponse } from 'next/server';
 

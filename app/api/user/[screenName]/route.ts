@@ -1,6 +1,6 @@
 import { BadRequest, NotFound } from '@/server/error';
 import UsersStorage from '@/server/storage/users';
-import { responseErrorHandler } from '@/server/middleware/errorHandler';
+import { responseErrorHandler } from '@/server/handler/errorHandler';
 import { NextResponse } from 'next/server';
 
 export async function GET(req: Request, { params: { screenName } } : { params: { screenName: string }}) {
