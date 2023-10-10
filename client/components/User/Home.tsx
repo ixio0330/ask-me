@@ -28,7 +28,8 @@ const UserHome = ({ userInfo }: { userInfo: InAuthUser }) => {
       window.alert(fetchResult.message);
       return;
     }
-    setAskList(fetchResult?.data as InAskClient[]);
+    console.log(fetchResult.data);
+    setAskList(fetchResult.data as InAskClient[]);
   };
 
   const setTrigger = useCallback(() => setAskListFetchTrigger(!askListFetchTrigger), [askListFetchTrigger]);
@@ -95,9 +96,7 @@ const UserHome = ({ userInfo }: { userInfo: InAuthUser }) => {
               onUpdateDenyComplete={updateAsk}
             />
           ))
-          : askList
-            .filter(({ ask }) => ask)
-            .map((ask, index) => <Ask key={`ask-${index}`} {...ask} />)
+          : askList.map((ask, index) => <Ask key={`ask-${index}`} {...ask} />)
         }
         {
           pageLeft && 10 <= askList.length && (

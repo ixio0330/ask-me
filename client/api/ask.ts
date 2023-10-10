@@ -61,7 +61,12 @@ const AskApi = {
   },
   async getById(uid: string, askId: string) {
     try {
-      const res = await axios.get(`/api/ask?uid=${uid}&askId=${askId}`);
+      const token = await firebaseClient.Auth.currentUser?.getIdToken();
+      const res = await axios.get(`/api/ask?uid=${uid}&askId=${askId}`, {
+        headers: {
+          Authorization: token,
+        }
+      });
       return {
         result: true,
         data: res.data,

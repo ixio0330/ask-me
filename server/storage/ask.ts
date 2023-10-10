@@ -84,7 +84,7 @@ const AskStorage = {
           data: {
             ...askData,
             id: askId,
-            ask: askData.deny ? '비공개 처리된 질문입니다.' : askData.ask,
+            ask: askData.ask,
             reply: askData.deny ? null : askData.reply,
             createdAt: askData.createdAt.toDate().toISOString(),
             replyedAt: askData.replyedAt? askData.replyedAt.toDate().toISOString() : undefined,
@@ -120,7 +120,7 @@ const AskStorage = {
             ...askData,
             id: askId,
             deny,
-            ask: deny ? '비공개 처리된 질문입니다.' : askData.ask,
+            ask: askData.ask,
             reply: deny ? null : askData.reply,
             createdAt: askData.createdAt.toDate().toISOString(),
             replyedAt: askData.replyedAt? askData.replyedAt.toDate().toISOString() : undefined,

@@ -7,13 +7,9 @@ import convertDateToString from "@/common/utils/convert_date";
 import Reply from "../Typography/Reply";
 
 const Ask = ({ ask, replyedAt, reply, deny }: InAskClient) => {
+  if (deny) return null;
 
   const render = () => {
-    // Deny
-    if (deny) {
-      return <Typography className={C.paddingX20} size='s' weight='b'>{ask}</Typography>
-    }
-
     // Pending
     if (!reply) {
       return (
