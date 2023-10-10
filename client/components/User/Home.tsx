@@ -28,7 +28,6 @@ const UserHome = ({ userInfo }: { userInfo: InAuthUser }) => {
       window.alert(fetchResult.message);
       return;
     }
-    console.log(fetchResult.data);
     setAskList(fetchResult.data as InAskClient[]);
   };
 
