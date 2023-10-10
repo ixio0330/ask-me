@@ -92,6 +92,14 @@ const Answer = ({ uid, id, ask, deny, reply, replyedAt, onSendComplete, onUpdate
             </Typography>
             <Reply className={C.paddingX20}>{reply}</Reply>
           </div>
+          <S.AnswerActions className={C.paddingX20}>
+            <Switch 
+              label='공개' 
+              active={!deny} 
+              onClick={() => onUpdateDeny(uid, id, !deny)} 
+            />
+            <Button>답변 수정</Button>
+          </S.AnswerActions>
         </>
       )
     }
