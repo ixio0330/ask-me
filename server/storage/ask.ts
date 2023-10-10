@@ -32,7 +32,7 @@ const AskStorage = {
     });
   },
   // * 질문 전체 조회
-  async getAll({ uid, offset = '0', limit = '10' }: { uid: string; offset: string | undefined; limit: string | undefined; }) {
+  async getAll({ uid, offset = '0', limit = '10', isOwner }: { uid: string; offset: string | undefined; limit: string | undefined; isOwner?: boolean }) {
     const userRef = firebaseAdmin.Firebase.collection(USER_COL).doc(uid);
     return await firebaseAdmin.Firebase.runTransaction(async (transection) => {
       try {
@@ -48,7 +48,7 @@ const AskStorage = {
           const returnData = {
             ...docData,
             id: mv.id,
-            ask: docData.deny ? '비공개 처리된 질문입니다.' : docData.ask, // TODO 데이터 전송 X
+            ask: docData.deny ? isOwner ? docData.ask : '' : docData.ask,
             reply: docData.deny ? null : docData.reply,
             createdAt: docData.createdAt.toDate().toISOString(),
             replyedAt: docData.replyedAt? docData.replyedAt.toDate().toISOString() : undefined,

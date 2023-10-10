@@ -95,7 +95,9 @@ const UserHome = ({ userInfo }: { userInfo: InAuthUser }) => {
               onUpdateDenyComplete={updateAsk}
             />
           ))
-          : askList.map((ask, index) => <Ask key={`ask-${index}`} {...ask}  />)
+          : askList
+            .filter(({ ask }) => ask)
+            .map((ask, index) => <Ask key={`ask-${index}`} {...ask} />)
         }
         {
           pageLeft && 10 <= askList.length && (

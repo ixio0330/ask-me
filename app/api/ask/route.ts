@@ -15,6 +15,18 @@ export async function GET(req: NextRequest) {
       throw new BadRequest('uid가 누락되었습니다.');
     }
 
+    // 토큰이 있을 때만 유효성 검사
+    const token = req.headers.get('authorization');
+    let tokenUid: null | string = null;
+    if (token) {
+      try {
+        const decode = await firebaseAdmin.Auth.verifyIdToken(token);
+        tokenUid = decode.uid;
+      } catch (error) {
+        throw new NotValidToken();
+      }
+    }
+
     const uidToStr = Array.isArray(uid) ? uid[0] : uid;
     const getResult = askId ? 
       await AskStorage.getById({ uid: uidToStr, askId: askId as string }) : 
@@ -22,6 +34,7 @@ export async function GET(req: NextRequest) {
         uid: uidToStr, 
         offset: Array.isArray(offset) ? offset[0] : offset, 
         limit: Array.isArray(limit) ? limit[0] : limit, 
+        isOwner: uid === tokenUid,
       });
     
     if (!getResult.result) {
