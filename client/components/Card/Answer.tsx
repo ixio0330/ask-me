@@ -10,6 +10,7 @@ import Button from "../Button";
 import Reply from "../Typography/Reply";
 import { useState } from "react";
 import { AskApi, ReplyApi } from "@/client/api";
+import { notify } from "../Toast";
 
 export interface AnswerProps extends InAskClient {
   onSendComplete?: () => void;
@@ -19,21 +20,19 @@ export interface AnswerProps extends InAskClient {
 const Answer = ({ uid, id, ask, deny, reply, replyedAt, onSendComplete, onUpdateDenyComplete }: AnswerProps) => {
   const [newReply, setNewReply] = useState('');
   const onClickPostReply = async () => {
-    const postResult = await ReplyApi.post({ uid, askId: id, reply: newReply });
-    if (!postResult?.success) {
-      window.alert(postResult?.message);
+    if (!newReply) {
+      notify('답변을 입력해주세요');
       return;
     }
+    const postResult = await ReplyApi.post({ uid, askId: id, reply: newReply });
+    if (!postResult?.success) return;
     setNewReply('');
     onSendComplete && onSendComplete();
   };
 
   const onUpdateDeny = async (uid: string, askId: string, deny: boolean) => {
     const fetchResult = await AskApi.putAskDeny(uid, askId, deny);
-    if (!fetchResult.success || !fetchResult.data) {
-      window.alert(fetchResult?.message);
-      return;
-    }
+    if (!fetchResult.success || !fetchResult.data) return;
     onUpdateDenyComplete && onUpdateDenyComplete(fetchResult.data?.id, fetchResult.data);
   };
 

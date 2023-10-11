@@ -1,11 +1,12 @@
 import firebaseClient from '@/common/firebase/client';
 import { AddAsk, InAskClient } from "@/common/models/ask";
 import axios, { Response } from './axios';
+import { errorNotify } from '../components/Toast';
 
 const AskApi = {
   async post({ uid, ask, author }: AddAsk) {
     if (ask.length <= 0 || 2000 < ask.length) return;
-    try {
+      try {
       const res = await axios.post('ask', {
         uid,
         ask,
@@ -13,7 +14,9 @@ const AskApi = {
       });
       return res.data as Response<InAskClient>;
     } catch (error: unknown) {
-      return error as Response<InAskClient>;
+      const newError = error as Response<InAskClient>;
+      errorNotify(newError.message);
+      return newError;
     }
   },
   async getAll(uid: string, offset: number) {
@@ -26,7 +29,9 @@ const AskApi = {
       });
       return res.data as Response<InAskClient[]>;
     } catch (error) {
-      return error as Response<InAskClient[]>;
+      const newError = error as Response<InAskClient[]>;
+      errorNotify(newError.message);
+      return newError;
     }
   },
   async getById(uid: string, askId: string) {
@@ -39,7 +44,9 @@ const AskApi = {
       });
       return res.data as Response<InAskClient>;
     } catch (error) {
-      return error as Response<InAskClient>;
+      const newError = error as Response<InAskClient>;
+      errorNotify(newError.message);
+      return newError;
     }
   },
   async putAskDeny(uid: string, askId: string, deny: boolean) {
@@ -61,7 +68,9 @@ const AskApi = {
       );
       return res.data as Response<InAskClient>;
     } catch (error) {
-      return error as Response<InAskClient>;
+      const newError = error as Response<InAskClient>;
+      errorNotify(newError.message);
+      return newError;
     }
   },
 };

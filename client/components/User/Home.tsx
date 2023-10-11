@@ -24,10 +24,7 @@ const UserHome = ({ userInfo }: { userInfo: InAuthUser }) => {
   const fetchAllAsks = async (uid: string | undefined) => {
     if (!uid) return;
     const fetchResult = await AskApi.getAll(uid, 0);
-    if (!fetchResult.success) {
-      window.alert(fetchResult.message);
-      return;
-    }
+    if (!fetchResult.success) return;
     fetchResult.data && setAskList(fetchResult.data);
   };
 
@@ -36,10 +33,7 @@ const UserHome = ({ userInfo }: { userInfo: InAuthUser }) => {
   const fetchAsk = async (uid: string | undefined, askId: string) => {
     if (!uid || !askId) return;
     const fetchResult = await AskApi.getById(uid, askId);
-    if (!fetchResult.success || !fetchResult.data) {
-      window.alert(fetchResult.message);
-      return;
-    }
+    if (!fetchResult.success || !fetchResult.data) return;
     updateAsk(fetchResult.data?.id, fetchResult.data);
   };
 
@@ -54,10 +48,7 @@ const UserHome = ({ userInfo }: { userInfo: InAuthUser }) => {
     offset.current += 10;
     if (!uid) return;
     const fetchResult = await AskApi.getAll(uid, offset.current);
-    if (!fetchResult.success) {
-      window.alert(fetchResult.message);
-      return;
-    }
+    if (!fetchResult.success) return;
     if (fetchResult.data?.length === 0) {
       setPageLeft(false);
       return;

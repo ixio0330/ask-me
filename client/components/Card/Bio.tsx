@@ -7,6 +7,7 @@ import { InAuthUser } from "@/common/models/in_auth_user";
 import Image from 'next/image'
 import { ComponentProps, useState } from "react";
 import { AskApi } from "@/client/api";
+import { notify } from '@/client/components/Toast';
 
 export type BioStatus = 'visitor' | 'owner' | 'update';
 
@@ -37,15 +38,16 @@ const Bio = (
 ) => {
   const [ask, setAsk] = useState('');
   const onClickSend = async () => {
+    if (!ask) {
+      notify('질문을 입력해주세요');
+      return;
+    }
     const res = await AskApi.post({ 
       uid: uid as string, 
       ask, 
       author: null,
     });
-    if (!res?.success) {
-      window.alert(res?.message);
-      return;
-    }
+    if (!res?.success) return;
     setAsk('');
     onSendComplete && onSendComplete();
   };
