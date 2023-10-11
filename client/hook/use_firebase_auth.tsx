@@ -6,6 +6,7 @@ import { GoogleAuthProvider, signInWithPopup, User } from 'firebase/auth';
 import firebaseClient from '@/common/firebase/client';
 import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
+import { errorNotify } from "../components/Toast";
 
 const useFirebaseAuth = () => {
   const [authUser, setAuthUser] = useState<InAuthUser | null>(null);
@@ -55,7 +56,7 @@ const useFirebaseAuth = () => {
       setLoading(false);
     } catch (error) {
       if (error instanceof AxiosError) {
-        window.alert(error.response?.data.message ?? '로그인 중 오류가 발생했습니다.');
+        errorNotify(error.response?.data.message ?? '로그인 중 오류가 발생했습니다.');
       }
     }
   };
