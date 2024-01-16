@@ -10,7 +10,7 @@ import { errorNotify } from "../components/Toast";
 
 const useFirebaseAuth = () => {
   const [authUser, setAuthUser] = useState<InAuthUser | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   /**
@@ -62,10 +62,14 @@ const useFirebaseAuth = () => {
   };
 
   // * 자동 로그인
-  // useEffect(() => {
-  //   const unsubscribe = firebaseClient.Auth.onAuthStateChanged(authStateChanged);
-  //   return () => unsubscribe();
-  // }, []);
+  useEffect(() => {
+    const unsubscribe = firebaseClient.Auth.onAuthStateChanged((user) => {
+      if(user) { 
+        authStateChanged(user);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (authUser?.uid) {
