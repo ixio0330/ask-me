@@ -38,7 +38,7 @@ const Bio = (
 ) => {
   const [ask, setAsk] = useState('');
   const onClickSend = async () => {
-    if (!ask) {
+    if (!ask.trim()) {
       notify('질문을 입력해주세요');
       return;
     }
