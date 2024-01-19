@@ -24,6 +24,8 @@
 
 <p>데이터베이스는 Firebase를, 배포는 Vercel을 이용했어요.</p>
 
+Chromatic을 이용해 [Storybook](https://65aa07d45f993ddf97414579-psbbktufap.chromatic.com/?path=/story/components-card-answer--default)을 배포했어요.
+
 <h3>Getting Started</h3>
 
 GitHub 저장소를 clone하고 해당 디렉토리에서 터미널을 열고 아래 명령어를 차례로 입력해주세요.
